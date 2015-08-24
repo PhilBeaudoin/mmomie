@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<link rel="import" href="/base/base.html">
+
+<script>
+
+mm.exportTo('mm', function() {
+
+  function Model() {
+    this.msg_ = 'Hello world!';
+  }
+
+  Model.prototype = {
+    get msg() {
+      return this.msg_;
+    }
+  };
+
+
+  return {
+    Model: Model
+  };
+});
+
+</script>
