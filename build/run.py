@@ -21,7 +21,7 @@ def RunTests():
   loadHTML('/game.html');
   """
   res = vinn.RunJsString(
-    cmd, source_paths=list(project.source_paths),
+    cmd, source_paths=list([project.source_path]),
     js_args=[], stdout=sys.stdout, stdin=sys.stdin)
   return res.returncode
 
