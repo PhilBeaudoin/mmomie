@@ -12,6 +12,10 @@ mm.exportTo('mm.m', function() {
   }
 
   CardStack.prototype = {
+    get size() {
+      return this.cards_.length;
+    },
+    
     push: function(card) {
       this.cards_.push(card);
     },
@@ -56,6 +60,15 @@ mm.exportTo('mm.m', function() {
       this.cards_.some(function (card) {
         return card.symbol === symbol;
       });
+    },
+
+    shuffle: function() {
+      for(var j, x, i = this.cards_.length; i;) {
+        j = Math.floor(Math.random() * i);
+        x = this.cards_[--i];
+        this.cards_[i] = this.cards_[j];
+        this.cards_[j] = x;
+      }
     }
 
   };

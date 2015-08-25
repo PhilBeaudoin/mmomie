@@ -16,12 +16,23 @@ mm.exportTo('mm.m', function() {
   Card.COLOR_GREEN = 0;
   Card.COLOR_YELLOW = 1;
   Card.COLOR_RED = 2;
+  Card.COLOR_NAMES = [ 'Green', 'Yellow', 'Red' ];
+
+  Card.ID_COLLAR = 0;
+  Card.ID_MIRROR = 1;
+  Card.ID_HEAD = 2;
+  Card.ID_GAME = 3;
+  Card.ID_STATUE = 4;
+  Card.ID_BIRD = 5;
+  Card.ID_NAMES = [ 'Collar', 'Mirror', 'Head', 'Game', 'Statue', 'Bird' ];
 
   Card.SYMBOL_NONE = 0;
   Card.SYMBOL_AMULET = 1;
-  Card.SYMBOL_MUMMY = 1;
-  Card.SYMBOL_WEREWOLF = 1;
-  Card.SYMBOL_MONSTER = 1;
+  Card.SYMBOL_MUMMY = 2;
+  Card.SYMBOL_WEREWOLF = 3;
+  Card.SYMBOL_MONSTER = 4;
+  Card.SYMBOL_NAMES = [ 'None', 'Amulet', 'Mummy', 'Werewolf', 'Monster' ];
+
 
   Card.prototype = {
     get color() {
@@ -35,6 +46,13 @@ mm.exportTo('mm.m', function() {
     },
     get symbol() {
       return this.symbol_;
+    },
+    format: function() {
+      var name = Card.COLOR_NAMES[this.color] + ': ' + this.treasureCount + 
+        ' ' + Card.ID_NAMES[this.treasureId];
+      if (this.symbol !== Card.SYMBOL_NONE)
+        name += ' ' + Card.SYMBOL_NAMES[this.symbol];
+      return name;
     }
   };
 

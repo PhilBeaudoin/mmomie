@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<link rel="import" href="/base/base.html">
+<link rel="import" href="/model/card.html">
+
+<script>
+
+mm.exportTo('mm.m', function() {
+
+  Card = mm.m.Card;
+
+  function Info(treasureCount, symbol) {
+    return {
+      treasureCount: treasureCount,
+      symbol: symbol
+    };
+  }
+
+  function Color(color, funs) {
+    return function(stack) {
+      funs.forEach(function(f) {
+        f(stack, color);
+      });      
+    }
+  }
+
+  function Id(id, funs) {
+    return function(stack, color) {
+      funs.forEach(function(f) {
+        f(stack, color, id);
+      });      
+    }
+  }
+
+  function Info(count, symbol) {
+    symbol = symbol || Card.SYMBOL_NONE;
+    return function(stack, color, id) {
+      stack.push(new Card(color, id, count, symbol));
+    }
+  }
+
+  function AddInitialCards(stack) {
+    Color(Card.COLOR_GREEN, [
+      Id(Card.ID_COLLAR, [
+        Info(1, Card.SYMBOL_AMULET), Info(1), Info(1),
+        Info(2, Card.SYMBOL_MONSTER)]),
+      Id(Card.ID_MIRROR, [
+        Info(1, Card.SYMBOL_AMULET), Info(1), Info(1),
+        Info(2, Card.SYMBOL_MONSTER)]),
+      Id(Card.ID_HEAD, [
+        Info(1, Card.SYMBOL_AMULET), Info(1), Info(1),
+        Info(2, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_GAME, [
+        Info(1, Card.SYMBOL_AMULET), Info(1), Info(1),
+        Info(2, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_STATUE, [
+        Info(1), Info(1), Info(1), Info(2, Card.SYMBOL_MUMMY)]),
+      Id(Card.ID_BIRD, [
+        Info(1), Info(1), Info(1), Info(2, Card.SYMBOL_MUMMY)])])(stack);
+    Color(Card.COLOR_YELLOW, [
+      Id(Card.ID_COLLAR, [Info(1), Info(2), Info(3, Card.SYMBOL_MUMMY)]),
+      Id(Card.ID_MIRROR, [Info(1), Info(2), Info(3, Card.SYMBOL_MUMMY)]),
+      Id(Card.ID_HEAD, [Info(1), Info(2), Info(3, Card.SYMBOL_MONSTER)]),
+      Id(Card.ID_GAME, [Info(1), Info(2), Info(3, Card.SYMBOL_MONSTER)]),
+      Id(Card.ID_STATUE, [
+        Info(1, Card.SYMBOL_AMULET), Info(2), Info(3, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_BIRD, [
+        Info(1, Card.SYMBOL_AMULET), Info(2),
+        Info(3, Card.SYMBOL_WEREWOLF)])])(stack);
+    Color(Card.COLOR_RED, [
+      Id(Card.ID_COLLAR, [Info(2), Info(3, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_MIRROR, [
+        Info(2, Card.SYMBOL_AMULET), Info(3, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_HEAD, [Info(2), Info(4, Card.SYMBOL_MUMMY)]),
+      Id(Card.ID_GAME, [Info(3), Info(3, Card.SYMBOL_MUMMY)]),
+      Id(Card.ID_STATUE, [Info(3), Info(4, Card.SYMBOL_MONSTER)]),
+      Id(Card.ID_BIRD, [Info(3), Info(4, Card.SYMBOL_MONSTER)])])(stack);
+  }
+
+  return {
+    AddInitialCards: AddInitialCards
+  };
+});
+
+</script>

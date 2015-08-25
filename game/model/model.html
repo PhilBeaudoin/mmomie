@@ -3,6 +3,7 @@
 <link rel="import" href="/base/base.html">
 <link rel="import" href="/model/card.html">
 <link rel="import" href="/model/card_stack.html">
+<link rel="import" href="/model/config.html">
 
 <script>
 
@@ -13,13 +14,17 @@ mm.exportTo('mm.m', function() {
 
   function Model() {
     this.stack_ = new CardStack();
-    this.stack_.push(new Card(Card.COLOR_RED, 0, 3, Card.SYMBOL_NONE));
-    this.stack_.push(new Card(Card.COLOR_RED, 0, 3, Card.SYMBOL_NONE));
+    mm.m.AddInitialCards(this.stack_);
+    this.stack_.shuffle();
   }
 
   Model.prototype = {
     get msg() {
-      return this.stack_.computeScore();
+      var text = '';
+      this.stack_.cards_.forEach(function(card) {
+        text += card.format() + '\n';
+      });
+      return text;
     }
   };
 
