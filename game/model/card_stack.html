@@ -15,9 +15,23 @@ mm.exportTo('mm.m', function() {
     get size() {
       return this.cards_.length;
     },
-    
+
     push: function(card) {
       this.cards_.push(card);
+    },
+
+    clear: function() {
+      this.cards_ = [];
+    },
+
+    format: function(prefix) {
+      if (this.cards_.length === 0)
+        return prefix + 'Empty\n';
+      output = '';
+      this.cards_.forEach(function(card) {
+        output += card.format(prefix) + '\n';
+      });
+      return output;
     },
 
     computeScore: function() {
@@ -69,6 +83,14 @@ mm.exportTo('mm.m', function() {
         this.cards_[i] = this.cards_[j];
         this.cards_[j] = x;
       }
+    },
+
+    distribute: function(stacks) {
+      var i = 0;
+      this.cards_.forEach(function(card){
+        stacks[i].push(card);
+        i = (i + 1) % stacks.length;
+      });
     }
 
   };

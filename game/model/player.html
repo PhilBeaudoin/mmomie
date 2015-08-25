@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<link rel="import" href="/base/base.html">
+<link rel="import" href="/model/card.html">
+<link rel="import" href="/model/card_stack.html">
+<link rel="import" href="/model/config.html">
+
+<script>
+
+mm.exportTo('mm.m', function() {
+
+  function Player() {
+    this.hand_ = new mm.m.CardStack();
+    this.score_ = 0;
+  }
+
+  Player.prototype = {
+    get hand() {
+      return this.hand_;
+    },
+
+    format: function(prefix) {
+      var output = prefix + 'Score: ' + this.score_ + '\n';
+      output += prefix + 'Hand:\n' + this.hand_.format(prefix + '  ');
+      return output;
+    },
+
+    addCard: function(card) {
+      this.hand_.push(card);
+    },
+
+    scoreHand: function() {
+      this.score_ += this.hand_.computeScore();
+      this.hand_.clear();
+    }
+  };
+
+  return {
+    Player: Player
+  };
+});
+
+</script>

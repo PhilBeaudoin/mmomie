@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<link rel="import" href="/model/model.html">
+
+<script>
+
+mm.exportTo('mm.c', function() {
+
+  var Model = mm.m.Model;
+
+  function Controller(playerControllers) {
+    this.model_ = new Model(playerControllers.length);
+    this.playerControllers_ = playerControllers;
+    this.currentTurn_ = 0;
+    this.currentPlayer_ = 0;
+  }
+
+  Controller.prototype = {
+    format: function(prefix) {
+      var output = prefix + 'Current turn: ' + this.currentTurn_ + '\n';
+      output += prefix + 'Current player: ' + this.currentPlayer_ + '\n';
+      output += prefix + 'Model:\n' + this.model_.format(prefix + '  ');
+      // TODO: Format player controllers.
+      return output;
+    },
+
+    scoreHand: function() {
+      this.score_ += this.hand_.computeScore();
+      this.hand_.clear();
+    }
+  };
+
+  return {
+    Controller: Controller
+  };
+});
+
+</script>

@@ -4,6 +4,7 @@
 <link rel="import" href="/model/card.html">
 <link rel="import" href="/model/card_stack.html">
 <link rel="import" href="/model/config.html">
+<link rel="import" href="/model/player.html">
 
 <script>
 
@@ -11,20 +12,34 @@ mm.exportTo('mm.m', function() {
 
   var Card = mm.m.Card;
   var CardStack= mm.m.CardStack;
+  var Player = mm.m.Player;
 
-  function Model() {
-    this.stack_ = new CardStack();
-    mm.m.AddInitialCards(this.stack_);
-    this.stack_.shuffle();
+  function Model(numPlayers) {
+    var tempStack = new CardStack();
+    mm.m.AddInitialCards(tempStack);
+    tempStack.shuffle();
+
+    this.stacks_ = [new CardStack(), new CardStack()];
+    tempStack.distribute(this.stacks_);
+
+    this.players_ = []
+    for (var i = 0; i < numPlayers; ++i) {
+      this.players_.push(new Player());
+    }
   }
 
   Model.prototype = {
-    get msg() {
-      var text = '';
-      this.stack_.cards_.forEach(function(card) {
-        text += card.format() + '\n';
-      });
-      return text;
+    format: function(prefix) {
+      var output = '';
+      for (var i = 0; i < this.stacks_.length; ++i) {      
+        output += prefix + 'Stack ' + i + ':\n';
+        output += this.stacks_[i].format(prefix + '  ');
+      }
+      for (var i = 0; i < this.players_.length; ++i) {
+        output += prefix + 'Player ' + i + ':\n';
+        output += this.players_[i].format(prefix + '  ');
+      }
+      return output;
     }
   };
 

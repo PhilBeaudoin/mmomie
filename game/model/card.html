@@ -47,9 +47,9 @@ mm.exportTo('mm.m', function() {
     get symbol() {
       return this.symbol_;
     },
-    format: function() {
-      var name = Card.COLOR_NAMES[this.color] + ': ' + this.treasureCount + 
-        ' ' + Card.ID_NAMES[this.treasureId];
+    format: function(prefix) {
+      var name = prefix + Card.COLOR_NAMES[this.color] + ': ' +
+        this.treasureCount + ' ' + Card.ID_NAMES[this.treasureId];
       if (this.symbol !== Card.SYMBOL_NONE)
         name += ' ' + Card.SYMBOL_NAMES[this.symbol];
       return name;
