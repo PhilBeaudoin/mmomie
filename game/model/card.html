@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<link rel="import" href="/base/base.html">
+
+<script>
+
+mm.exportTo('mm.m', function() {
+
+  function Card(color, treasureId, treasureCount, symbol) {
+    this.color_ = color;
+    this.treasureId_ = treasureId;
+    this.treasureCount_ = treasureCount;
+    this.symbol_ = symbol;
+  }
+
+  Card.COLOR_GREEN = 0;
+  Card.COLOR_YELLOW = 1;
+  Card.COLOR_RED = 2;
+
+  Card.SYMBOL_NONE = 0;
+  Card.SYMBOL_AMULET = 1;
+  Card.SYMBOL_MUMMY = 1;
+  Card.SYMBOL_WEREWOLF = 1;
+  Card.SYMBOL_MONSTER = 1;
+
+  Card.prototype = {
+    get color() {
+      return this.color_;
+    },
+    get treasureId() {
+      return this.treasureId_;
+    },
+    get treasureCount() {
+      return this.treasureCount_;
+    },
+    get symbol() {
+      return this.symbol_;
+    }
+  };
+
+  return {
+    Card: Card
+  };
+});
+
+</script>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<link rel="import" href="/base/base.html">
+<link rel="import" href="/model/card.html">
+
+<script>
+
+mm.exportTo('mm.m', function() {
+
+  function CardStack() {
+    this.cards_ = [];
+  }
+
+  CardStack.prototype = {
+    push: function(card) {
+      this.cards_.push(card);
+    },
+
+    computeScore: function() {
+      var idToInfo = {};
+      this.cards_.forEach(function (card) {
+        var info = idToInfo[card.treasureId] || { count: 0, multi: false };
+        if (info.count > 0)
+          info.multi = true;
+        info.count += card.treasureCount;
+        idToInfo[card.treasureId] = info;
+      });
+      var score = 0;
+      Object.keys(idToInfo).forEach(function (key) {
+        var info = idToInfo[key];
+        score += info.count;
+        if (info.multi)
+          score += info.count;
+      });
+      return score;
+    },
+
+    isCursed: function() {
+      var badSum = 0;
+      this.cards_.forEach(function (card) {
+        switch (card.symbol) {
+          case Card.SYMBOL_NONE:
+            return;
+          case Card.SYMBOL_AMULET:
+            badSum -= 1;
+          case Card.SYMBOL_MUMMY:
+          case Card.SYMBOL_WEREWOLF:
+          case Card.SYMBOL_MONSTER:
+            badSum += 1;
+        }
+      });
+      return badSum > 0;
+    },
+
+    hasSymbol: function(symbol) {
+      this.cards_.some(function (card) {
+        return card.symbol === symbol;
+      });
+    }
+
+  };
+
+  return {
+    CardStack: CardStack
+  };
+});
+
+</script>

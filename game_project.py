@@ -8,13 +8,16 @@ import re
 
 
 def _AddToPathIfNeeded(path):
-  print path
   if path not in sys.path:
     sys.path.insert(0, path)
 
 def UpdateSysPathIfNeeded():
   p = GameProject()
   _AddToPathIfNeeded(p.vinn_path)
+  _AddToPathIfNeeded(os.path.join(p.third_party_path, 'WebOb'))
+  _AddToPathIfNeeded(os.path.join(p.third_party_path, 'Paste'))
+  _AddToPathIfNeeded(os.path.join(p.third_party_path, 'six'))
+  _AddToPathIfNeeded(os.path.join(p.third_party_path, 'webapp2'))
 
 class GameProject():
   main_path = os.path.dirname(__file__)
@@ -23,5 +26,4 @@ class GameProject():
   game_root_path = os.path.abspath(os.path.join(main_path, 'game'))
 
   def __init__(self):
-    self.source_paths = []
-    self.source_paths.append(self.game_root_path)
+    self.source_path = self.game_root_path

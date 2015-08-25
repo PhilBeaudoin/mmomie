@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 
 <link rel="import" href="/base/base.html">
+<link rel="import" href="/model/card.html">
+<link rel="import" href="/model/card_stack.html">
 
 <script>
 
-mm.exportTo('mm', function() {
+mm.exportTo('mm.m', function() {
+
+  var Card = mm.m.Card;
+  var CardStack= mm.m.CardStack;
 
   function Model() {
-    this.msg_ = 'Hello world!';
+    this.stack_ = new CardStack();
+    this.stack_.push(new Card(Card.COLOR_RED, 0, 3, Card.SYMBOL_NONE));
+    this.stack_.push(new Card(Card.COLOR_RED, 0, 3, Card.SYMBOL_NONE));
   }
 
   Model.prototype = {
     get msg() {
-      return this.msg_;
+      return this.stack_.computeScore();
     }
   };
-
 
   return {
     Model: Model
