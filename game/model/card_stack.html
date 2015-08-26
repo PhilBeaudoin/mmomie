@@ -20,6 +20,10 @@ mm.exportTo('mm.m', function() {
       this.cards_.push(card);
     },
 
+    pop: function() {
+      return this.cards_.pop();
+    },
+
     clear: function() {
       this.cards_ = [];
     },
@@ -71,7 +75,7 @@ mm.exportTo('mm.m', function() {
     },
 
     hasSymbol: function(symbol) {
-      this.cards_.some(function (card) {
+      return this.cards_.some(function (card) {
         return card.symbol === symbol;
       });
     },
@@ -91,6 +95,14 @@ mm.exportTo('mm.m', function() {
         stacks[i].push(card);
         i = (i + 1) % stacks.length;
       });
+    },
+
+    colors: function() {
+      var result = [];
+      this.cards_.forEach(function(card){
+        result.push(card.color);
+      });
+      return result;
     }
 
   };

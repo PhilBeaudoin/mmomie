@@ -29,10 +29,43 @@ mm.exportTo('mm.m', function() {
       this.hand_.push(card);
     },
 
+    addToScore: function(score) {
+      this.score_ += score;
+    },
+
+    computeHandScore: function() {
+      return this.hand_.computeScore();
+    },
+
     scoreHand: function() {
-      this.score_ += this.hand_.computeScore();
+      this.score_ += this.computeHandScore();
       this.hand_.clear();
+    },
+
+    clearHand: function() {
+      this.hand_.clear();
+    },
+
+    handColors: function() {
+      return this.hand_.colors();
+    },
+
+    addCardToHand: function(card) {
+      this.hand_.push(card);
+    },
+
+    isHandEmpty: function() {
+      return this.hand_.size === 0;
+    },
+
+    isHandCursed: function() {
+      return this.hand_.isCursed();
+    },
+
+    handHasSymbol: function(symbol) {
+      return this.hand_.hasSymbol(symbol);
     }
+
   };
 
   return {

@@ -40,6 +40,59 @@ mm.exportTo('mm.m', function() {
         output += this.players_[i].format(prefix + '  ');
       }
       return output;
+    },
+
+    isStackEmpty: function(stackIndex) {
+      return this.stacks_.length <= stackIndex ||
+          this.stacks_[stackIndex].length === 0;
+    },
+
+    isPlayerHandEmpty: function(playerIndex) {
+      this.players_[playerIndex].isHandEmpty();
+    },
+
+    isPlayerHandCursed: function(playerIndex) {
+      return this.players_[playerIndex].isHandCursed();
+    },
+
+    playerHandHasSymbol: function(playerIndex, symbol) {
+      return this.players_[playerIndex].handHasSymbol(symbol);
+    },
+
+    topColors: function() {
+      var result = [];
+      for (var i = 0; i < this.stacks_.length; ++i) {
+        var length = stacks_[i].length;
+        if (length === 0)
+          result.push(undefined);
+        else
+          result.push(this.stacks_[i][length - 1].color);
+      }
+      return result;
+    },
+
+    playerHandColors: function(playerIndex) {
+      return this.players_[playerIndex].handColors();
+    },
+
+    playerDrawCard: function(playerIndex, stackIndex) {
+      this.players_[playerIndex].addCardToHand(this.stacks_[stackIndex].pop());
+    },
+
+    computePlayerHandScore: function(playerIndex) {
+      return this.players_[playerIndex].computeHandScore();
+    },
+
+    addToPlayerScore: function(playerIndex, score) {
+      this.players_[playerIndex].addToScore(score);
+    },
+
+    playerScoreHand: function(playerIndex) {
+      this.players_[playerIndex].scoreHand();
+    },
+
+    playerClearHand: function(playerIndex) {
+      this.players_[playerIndex].clearHand();      
     }
   };
 

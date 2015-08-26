@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <link rel="import" href="/model/model.html">
+<link rel="import" href="/model/card.html">
 
 <script>
 
@@ -16,6 +17,10 @@ mm.exportTo('mm.c', function() {
   }
 
   Controller.prototype = {
+    get numPlayers() {
+      return this.playerControllers_.length;
+    },
+
     format: function(prefix) {
       var output = prefix + 'Current turn: ' + this.currentTurn_ + '\n';
       output += prefix + 'Current player: ' + this.currentPlayer_ + '\n';
@@ -27,6 +32,61 @@ mm.exportTo('mm.c', function() {
     scoreHand: function() {
       this.score_ += this.hand_.computeScore();
       this.hand_.clear();
+    },
+
+    canDrawCard: function(stackIndex) {
+      return !this.model_.isStackEmpty(stackIndex);
+    },
+
+    performDrawCard: function(stackIndex) {
+      this.model_.playerDrawCard(this.currentPlayer_, stackIndex);
+      this.advancePlayer_();
+    },
+
+    canScore: function() {
+      return !this.model_.isPlayerHandEmpty(this.currentPlayer_);
+    },
+
+    performScore: function() {
+      this.model_.playerScoreHand(this.currentPlayer_);
+      this.advancePlayer_();
+    },
+
+    canDenounce: function(playerIndex) {
+      return playerIndex !== this.currentPlayer_ &&
+          !this.model_.isPlayerHandEmpty(this.currentPlayer_) &&
+          !this.model_.isPlayerHandEmpty(playerIndex);
+    },
+
+    performDenounce: function(playerIndex) {
+      if (!this.model_.isPlayerHandCursed(playerIndex)) {
+        // Denounce failed.
+        this.model_.playerScoreHand(playerIndex);
+        this.advancePlayer_();
+      } else {
+        // Denounce worked, check monsters.
+        if (this.model_.playerHandHasSymbol(playerIndex,
+            mm.m.Card.SYMBOL_MUMMY)) {
+          // Current player scores opponent's hand.
+          this.model_.addToPlayerScore(this.currentPlayer_,
+              this.model_.computePlayerHandScore(playerIndex));
+        }
+        if (this.model_.playerHandHasSymbol(playerIndex,
+            mm.m.Card.SYMBOL_WEREWOLF)) {
+          // Current player draw two cards and can keep them.
+          // TODO: Ask the player controller to do this.
+        }
+        if (!this.model_.playerHandHasSymbol(playerIndex,
+            mm.m.Card.SYMBOL_MONSTER)) {
+          // Advance only if there are no monsters, otherwise take another move.
+          this.advancePlayer_();
+        }
+        this.model_.playerClearHand(playerIndex);
+      }
+    },
+
+    advancePlayer_: function() {
+      this.currentPlayer_ = (this.currentPlayer_ + 1) % this.numPlayers;   
     }
   };
 

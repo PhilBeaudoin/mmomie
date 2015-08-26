@@ -4,5 +4,21 @@
 
 <script>
 var c = new mm.c.Controller([1,2,3,4]);
+
+c.canDrawCard(0);
+c.performDrawCard(0);
+c.performDrawCard(1);
+c.performDrawCard(0);
+c.performDrawCard(1);
+
+c.performDrawCard(1);
+c.performDrawCard(0);
+c.performDrawCard(0);
+c.canScore();
+c.performScore();
+
+c.canDenounce(1);
+c.performDenounce(1);
+
 console.log(c.format(''));
 </script>
