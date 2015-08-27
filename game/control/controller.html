@@ -86,7 +86,9 @@ mm.exportTo('mm.c', function() {
     },
 
     advancePlayer_: function() {
-      this.currentPlayer_ = (this.currentPlayer_ + 1) % this.numPlayers;   
+      this.currentPlayer_ = (this.currentPlayer_ + 1) % this.numPlayers;
+      if (this.currentPlayer_ == 0)
+        this.currentTurn_++;
     }
   };
 

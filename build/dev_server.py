@@ -12,18 +12,20 @@ import game_project
 
 class SourcePathsHandler(webapp2.RequestHandler):
   def get(self, *args, **kwargs):  # pylint: disable=unused-argument
-    top_path = os.path.abspath(kwargs.pop('_top_path', None))
-    path = os.path.join(top_path, os.path.relpath(self.request.path, '/'))
-    if os.path.exists(path):
-      app = fileapp.FileApp(path)
-      app.cache_control(no_cache=True)
-      return app
+    request_path = os.path.relpath(self.request.path, '/')
+    paths = kwargs.pop('_source_paths', None)
+    for path in paths:
+      filename = os.path.join(os.path.abspath(path), request_path)
+      if os.path.exists(filename):
+        app = fileapp.FileApp(filename)
+        app.cache_control(no_cache=True)
+        return app
     self.abort(404)
 
 def CreateApp():
   project = game_project.GameProject()
   routes = [Route('/<:.+>', SourcePathsHandler,
-  	  defaults={'_top_path': project.source_path})]
+  	  defaults={'_source_paths': project.source_paths})]
   app = webapp2.WSGIApplication(routes=routes, debug=True)
   return app
 

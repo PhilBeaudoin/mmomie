@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2014 The Chromium Authors. All rights reserved.
+Use of this source code is governed by a BSD-style license that can be
+found in the LICENSE file.
+-->
+<link rel="import" href="/polymer/polymer.html">
+
+<link rel="import" href="/model/card.html">
+
+<dom-module id="mm-ui-card">
+  <template>
+    <style>
+    :host {
+      display: inline-block;
+      width: 110px;
+      height: 150px;
+    }
+    span {
+      display: inline-block;
+      border-radius: 7px;
+      width: 100%;
+      height: 100%;
+    }
+    #inner {
+      position: absolute;
+      width: calc(100% - 10px);
+      height: calc(100% - 10px);
+      top: 5px;
+      left: 5px;
+      background-color: white;
+    }
+    .face-up > #inner {
+      display: block;
+    }
+    .face-down > #inner {
+      display: none;
+    }
+    .green {
+      background-color: green;
+    }
+    .yellow {
+      background-color: yellow;
+    }
+    .red {
+      background-color: red;
+    }
+    #symbolContainer {
+      position: absolute;
+      top: 10px;
+      width: 100%;
+      height: 75px;
+      text-align: center;      
+    }
+    #symbolContainer > img {
+      width: 90px;
+      height: 75px;
+      display: inline-block;
+    }
+    #treasures {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      height: 30px;
+      text-align: center;
+    }
+    #treasures > img {
+      width: 25px;
+      height: 30px;
+      display: inline-block;
+    }
+    </style>
+    <span id="card" class$="{{computeClass_(isFaceUp, cardColor)}}">
+    <span id="inner">
+      <span id="symbolContainer"><img id="symbol"></img></span>
+      <span id="treasures"></span>
+    </span>
+    </span>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'mm-ui-card',
+      properties: {
+        isFaceUp: Boolean,
+        cardColor: String
+      },
+      ready: function() {
+        this.isFaceUp = false;
+        this.cardColor = '';
+      },
+      setFaceDown: function(color) {
+        this.isFaceUp = false;
+        this.setCardColor_(color);
+      },
+      setFaceUp: function(card) {
+        this.isFaceUp = true;
+        this.setCardColor_(card.color);
+        if (card.symbol == mm.m.Card.SYMBOL_NONE) {
+          this.$.symbolContainer.style.display = 'none';
+        } else {
+          this.$.symbolContainer.style.display = 'block';          
+          this.$.symbol.src = '/images/symbols/' + card.symbol + '.png';        
+        }
+        var treasuresEl = this.$.treasures;
+        for(var i = 0; i < card.treasureCount; ++i) {
+          var img = document.createElement('img');
+          img.src = '/images/treasures/' + card.treasureId + '.png';
+          Polymer.dom(treasuresEl).appendChild(img);
+        }
+      },
+      setCardColor_: function(color) {
+        switch(color) {
+          case mm.m.Card.COLOR_GREEN:
+            this.cardColor =  'green';
+            return;
+          case mm.m.Card.COLOR_YELLOW:
+            this.cardColor =  'yellow';
+            return;
+          case mm.m.Card.COLOR_RED:
+            this.cardColor =  'red';
+            return;
+        }
+        this.cardColor =  '';
+      },
+      computeClass_: function(isFaceUp, cardColor) {
+        return (isFaceUp ? 'face-up' : 'face-down') + ' ' + cardColor;
+      }
+    });
+  </script>
+
+</dom-module>

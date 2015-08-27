@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2014 The Chromium Authors. All rights reserved.
+Use of this source code is governed by a BSD-style license that can be
+found in the LICENSE file.
+-->
+<link rel="import" href="/polymer/polymer.html">
+
+<link rel="import" href="/model/card.html">
+
+<dom-module id="mm-ui-card-stack">
+  <template>
+    <style>
+    :host {
+      display: inline-block;
+    }
+    span {
+      display: inline-block;
+      padding-right: 60px;
+    }
+    mm-ui-card {
+      position: relative;
+      margin-right: -60px;
+    }
+    </style>
+    <span id="stack">
+    </span>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'mm-ui-card-stack',
+      ready: function() {
+        this.frontCard_ = undefined;
+        this.addEventListener('mouseleave',
+            this.bringToFront_.bind(this, undefined));
+      },
+
+      addCard: function(cardUi) {
+        Polymer.dom(this.$.stack).appendChild(cardUi);
+        cardUi.addEventListener('mouseenter',
+            this.bringToFront_.bind(this, cardUi));
+      },
+
+      bringToFront_: function(card, event) {
+        if (this.frontCard_ != undefined)
+          this.frontCard_.style.zIndex = '';
+        this.frontCard_ = card;
+        if (this.frontCard_ != undefined)
+          this.frontCard_.style.zIndex = '1';
+      }
+    });
+  </script>
+</dom-module>

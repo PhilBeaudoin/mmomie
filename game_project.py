@@ -23,7 +23,8 @@ class GameProject():
   main_path = os.path.dirname(__file__)
   third_party_path = os.path.abspath(os.path.join(main_path, 'third_party'))
   vinn_path = os.path.abspath(os.path.join(third_party_path, 'vinn'))
+  polymer_path = os.path.abspath(os.path.join(third_party_path, 'polymer'))
   game_root_path = os.path.abspath(os.path.join(main_path, 'game'))
 
   def __init__(self):
-    self.source_path = self.game_root_path
+    self.source_paths = [self.game_root_path, self.polymer_path]

@@ -1,24 +1,84 @@
 <!DOCTYPE html>
+<!DOCTYPE HTML>
+<html>
+<!--
+Copyright (c) 2011 The Chromium Authors. All rights reserved.
+Use of this source code is governed by a BSD-style license that can be
+found in the LICENSE file.
+-->
+<head>
+<title>Maudite Momie!</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<script src="/webcomponentsjs/webcomponents-lite.min.js"></script>
 
 <link rel="import" href="/control/controller.html">
+<link rel="import" href="/model/card.html">
+<link rel="import" href="/ui/card.html">
+<link rel="import" href="/ui/card_stack.html">
 
-<script>
-var c = new mm.c.Controller([1,2,3,4]);
+<style>
+  html,
+  body {
+    height: 100%;
+  }
 
-c.canDrawCard(0);
-c.performDrawCard(0);
-c.performDrawCard(1);
-c.performDrawCard(0);
-c.performDrawCard(1);
+  body {
+    -webkit-flex-direction: column;
+    display: -webkit-flex;
+    margin: 0;
+    padding: 0;
+  }
 
-c.performDrawCard(1);
-c.performDrawCard(0);
-c.performDrawCard(0);
-c.canScore();
-c.performScore();
+  body > tr-ui-timeline-view {
+    -webkit-flex: 1 1 auto;
+    min-height: 0;
+  }
+  body > tr-ui-timeline-view:focus {
+    outline: none;
+  }
+</style>
+</head>
+<body>
+  <mm-ui-card-stack>
+  </mm-ui-card-stack>
 
-c.canDenounce(1);
-c.performDenounce(1);
+  <script>
+  'use strict';
 
-console.log(c.format(''));
-</script>
+  var c = new mm.c.Controller([1,2,3,4]);
+
+  c.canDrawCard(0);
+  c.performDrawCard(0);
+  c.performDrawCard(1);
+  c.performDrawCard(0);
+  c.performDrawCard(1);
+
+  c.performDrawCard(1);
+  c.performDrawCard(0);
+  c.performDrawCard(0);
+  c.canScore();
+  c.performScore();
+
+  c.canDenounce(1);
+  c.performDenounce(1);
+
+  console.log(c.format(''));
+
+
+  function onLoad() {
+    var cardStackEl = document.querySelector('mm-ui-card-stack');
+    var cardEl = [
+      document.createElement('mm-ui-card'),
+      document.createElement('mm-ui-card')
+    ];
+    cardEl[0].setFaceDown(mm.m.Card.COLOR_RED);
+    cardEl[1].setFaceUp(new mm.m.Card(
+        mm.m.Card.COLOR_YELLOW, mm.m.Card.ID_GAME, 4, mm.m.Card.SYMBOL_MUMMY));
+    cardStackEl.addCard(cardEl[1]);
+    cardStackEl.addCard(cardEl[0]);
+  }
+  window.addEventListener('load', onLoad);
+
+  </script>
+</body>
