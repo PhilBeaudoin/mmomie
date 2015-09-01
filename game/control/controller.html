@@ -27,6 +27,10 @@ mm.exportTo('mm.c', function() {
       return this.model_;
     },
 
+    performMove: function() {
+      this.playerControllers_[this.model_.currentPlayer].performMove(this);
+    },
+
     format: function(prefix) {
       // TODO: Format player controllers.
       return prefix + 'Model:\n' + this.model_.format(prefix + '  ');

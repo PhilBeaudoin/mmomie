@@ -13,6 +13,7 @@ found in the LICENSE file.
 <script src="/webcomponentsjs/webcomponents-lite.min.js"></script>
 
 <link rel="import" href="/control/controller.html">
+<link rel="import" href="/control/random_ai_controller.html">
 <link rel="import" href="/model/card.html">
 <link rel="import" href="/ui/state_view.html">
 
@@ -36,26 +37,15 @@ found in the LICENSE file.
   <script>
   'use strict';
 
-  var c = new mm.c.Controller([1,2,3,4]);
-
-  var moves = [
-    c.performDrawCard.bind(c, 0),
-    c.performDrawCard.bind(c, 1),
-    c.performDrawCard.bind(c, 0),
-    c.performDrawCard.bind(c, 1),
-
-    c.performDrawCard.bind(c, 1),
-    c.performDrawCard.bind(c, 0),
-    c.performDrawCard.bind(c, 0),
-    c.performScore.bind(c),
-
-    c.performDenounce.bind(c, 1)
-  ];
-  var moveIndex = 0;
+  var c = new mm.c.Controller([
+    new mm.c.RandomAiController(),
+    new mm.c.RandomAiController(),
+    new mm.c.RandomAiController(),
+    new mm.c.RandomAiController()
+  ]);
 
   function nextMove() {
-    moves[moveIndex]();
-    ++moveIndex;
+    c.performMove();
     console.log(c.format(''));
     drawModel();
   }

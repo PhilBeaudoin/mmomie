@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<link rel="import" href="/model/model.html">
+<link rel="import" href="/model/card.html">
+
+<script>
+
+mm.exportTo('mm.c', function() {
+
+  var Model = mm.m.Model;
+
+  function RandomAiController() {
+  }
+
+  RandomAiController.prototype = {
+    performMove(controller) {
+      var possibleMoves = [];
+      for (var i = 0; i < controller.model.stacks.length; ++i) {
+        if (controller.canDrawCard(i))
+          possibleMoves.push(controller.performDrawCard.bind(controller, i));
+      }
+      if (controller.canScore())
+        possibleMoves.push(controller.performScore.bind(controller));      
+      for (var i = 0; i < controller.numPlayers; ++i) {
+        if (controller.canDenounce(i))
+          possibleMoves.push(controller.performDenounce.bind(controller, i));
+      }
+      var i = Math.floor(Math.random() * possibleMoves.length);
+      possibleMoves[i]();
+    }
+  };
+
+  return {
+    RandomAiController: RandomAiController
+  };
+});
+
+</script>
