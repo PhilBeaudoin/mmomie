@@ -33,20 +33,23 @@ mm.exportTo('mm.m', function() {
   Card.SYMBOL_MONSTER = 4;
   Card.SYMBOL_NAMES = [ 'None', 'Amulet', 'Mummy', 'Werewolf', 'Monster' ];
 
-
   Card.prototype = {
     get color() {
       return this.color_;
     },
+
     get treasureId() {
       return this.treasureId_;
     },
+
     get treasureCount() {
       return this.treasureCount_;
     },
+
     get symbol() {
       return this.symbol_;
     },
+
     format: function(prefix) {
       var name = prefix + Card.COLOR_NAMES[this.color] + ': ' +
         this.treasureCount + ' ' + Card.ID_NAMES[this.treasureId];

@@ -6,7 +6,7 @@ found in the LICENSE file.
 -->
 <link rel="import" href="/polymer/polymer.html">
 
-<link rel="import" href="/model/card.html">
+<link rel="import" href="/ui/card.html">
 
 <dom-module id="mm-ui-card-stack">
   <template>
@@ -16,39 +16,55 @@ found in the LICENSE file.
     }
     span {
       display: inline-block;
-      padding-right: 60px;
+      padding-right: 50px;
     }
     mm-ui-card {
       position: relative;
-      margin-right: -60px;
+      margin-right: -50px;
     }
     </style>
-    <span id="stack">
-    </span>
+    <template is="dom-repeat" items="{{cards}}"><mm-ui-card
+    on-mouseenter="bringToFront_" card="{{item}}"></mm-ui-card></template>
   </template>
 
   <script>
     Polymer({
       is: 'mm-ui-card-stack',
+
+      properties: {
+        cards: {
+          type: Array,
+          value: []
+        }
+      },
+
+      listeners: {
+        'mouseleave': 'bringToFront_'
+      },
+
       ready: function() {
         this.frontCard_ = undefined;
-        this.addEventListener('mouseleave',
-            this.bringToFront_.bind(this, undefined));
+        this.cards = [];
       },
 
-      addCard: function(cardUi) {
-        Polymer.dom(this.$.stack).appendChild(cardUi);
-        cardUi.addEventListener('mouseenter',
-            this.bringToFront_.bind(this, cardUi));
+      setCardStack: function(cards) {
+        cards.forEach(function(card) {
+          this.push('cards', card);
+        }.bind(this));
       },
 
-      bringToFront_: function(card, event) {
+      bringToFront_: function(event) {
+        this.sendAllToBack_();
+        this.frontCard_ = event.target;
+        this.frontCard_.style.zIndex = '1';
+      },
+
+      sendAllToBack_: function() {
         if (this.frontCard_ != undefined)
           this.frontCard_.style.zIndex = '';
-        this.frontCard_ = card;
-        if (this.frontCard_ != undefined)
-          this.frontCard_.style.zIndex = '1';
+        this.frontCard_ = undefined;
       }
+
     });
   </script>
 </dom-module>

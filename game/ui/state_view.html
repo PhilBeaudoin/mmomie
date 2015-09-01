@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2014 The Chromium Authors. All rights reserved.
+Use of this source code is governed by a BSD-style license that can be
+found in the LICENSE file.
+-->
+<link rel="import" href="/polymer/polymer.html">
+
+<link rel="import" href="/ui/card.html">
+<link rel="import" href="/ui/card_stack.html">
+
+<dom-module id="mm-ui-state-view">
+  <template>
+    <style>
+    </style>
+    <div>
+    Turn number: <span>{{model.currentTurn}}</span>
+    </div>
+    <div id="stacks">
+      <div>Stacks:</div>
+      <template is="dom-repeat" items="{{model.stacks}}">
+      <mm-ui-card card="{{item.topColor}}"></mm-ui-card>
+      </template>
+    </div>
+    <span id="players">
+      <template is="dom-repeat" items="{{model.players}}">
+      <div>
+        <div>Player <span>{{index}}</span>
+        (Score <span>{{item.score}}</span>):</div>
+      <mm-ui-card-stack cards="{{item.hand.cards}}"></mm-ui-card-stack>
+      </div>
+      </template>
+    </span>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'mm-ui-state-view',
+
+      properties: {
+        model: Object
+      },
+
+      setModel: function(model) {
+        this.set('model', model);
+      }
+    });
+  </script>
+
+</dom-module>

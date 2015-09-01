@@ -26,11 +26,35 @@ mm.exportTo('mm.m', function() {
     for (var i = 0; i < numPlayers; ++i) {
       this.players_.push(new Player());
     }
+
+    this.currentTurn_ = 0;
+    this.currentPlayer_ = 0;
   }
 
   Model.prototype = {
+    get numPlayers() {
+      return this.players_.length;
+    },
+
+    get stacks() {
+      return this.stacks_.slice(0);
+    },
+
+    get players() {
+      return this.players_.slice(0);
+    },
+
+    get currentTurn() {
+      return this.currentTurn_;
+    },
+
+    get currentPlayer() {
+      return this.currentPlayer_;
+    },
+
     format: function(prefix) {
-      var output = '';
+      var output = prefix + 'Current turn: ' + this.currentTurn_ + '\n';
+      output += prefix + 'Current player: ' + this.currentPlayer_ + '\n';
       for (var i = 0; i < this.stacks_.length; ++i) {      
         output += prefix + 'Stack ' + i + ':\n';
         output += this.stacks_[i].format(prefix + '  ');
@@ -45,6 +69,10 @@ mm.exportTo('mm.m', function() {
     isStackEmpty: function(stackIndex) {
       return this.stacks_.length <= stackIndex ||
           this.stacks_[stackIndex].length === 0;
+    },
+
+    iterateStacks: function(fun) {
+      this.stacks_.forEach(fun);
     },
 
     isPlayerHandEmpty: function(playerIndex) {
@@ -93,6 +121,12 @@ mm.exportTo('mm.m', function() {
 
     playerClearHand: function(playerIndex) {
       this.players_[playerIndex].clearHand();      
+    },
+
+    advancePlayer: function() {
+      this.currentPlayer_ = (this.currentPlayer_ + 1) % this.numPlayers;
+      if (this.currentPlayer_ == 0)
+        this.currentTurn_++;
     }
   };
 

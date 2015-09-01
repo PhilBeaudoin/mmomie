@@ -14,8 +14,7 @@ found in the LICENSE file.
 
 <link rel="import" href="/control/controller.html">
 <link rel="import" href="/model/card.html">
-<link rel="import" href="/ui/card.html">
-<link rel="import" href="/ui/card_stack.html">
+<link rel="import" href="/ui/state_view.html">
 
 <style>
   html,
@@ -29,54 +28,53 @@ found in the LICENSE file.
     margin: 0;
     padding: 0;
   }
-
-  body > tr-ui-timeline-view {
-    -webkit-flex: 1 1 auto;
-    min-height: 0;
-  }
-  body > tr-ui-timeline-view:focus {
-    outline: none;
-  }
 </style>
 </head>
 <body>
-  <mm-ui-card-stack>
-  </mm-ui-card-stack>
-
+  <button>Next</button>
+  <state-view></state-view>
   <script>
   'use strict';
 
   var c = new mm.c.Controller([1,2,3,4]);
 
-  c.canDrawCard(0);
-  c.performDrawCard(0);
-  c.performDrawCard(1);
-  c.performDrawCard(0);
-  c.performDrawCard(1);
+  var moves = [
+    c.performDrawCard.bind(c, 0),
+    c.performDrawCard.bind(c, 1),
+    c.performDrawCard.bind(c, 0),
+    c.performDrawCard.bind(c, 1),
 
-  c.performDrawCard(1);
-  c.performDrawCard(0);
-  c.performDrawCard(0);
-  c.canScore();
-  c.performScore();
+    c.performDrawCard.bind(c, 1),
+    c.performDrawCard.bind(c, 0),
+    c.performDrawCard.bind(c, 0),
+    c.performScore.bind(c),
 
-  c.canDenounce(1);
-  c.performDenounce(1);
+    c.performDenounce.bind(c, 1)
+  ];
+  var moveIndex = 0;
 
-  console.log(c.format(''));
+  function nextMove() {
+    moves[moveIndex]();
+    ++moveIndex;
+    console.log(c.format(''));
+    drawModel();
+  }
 
+  function drawModel() {
+    var containerEl = document.querySelector('state-view');
+    while (containerEl.firstChild)
+      containerEl.removeChild(containerEl.firstChild);
+    var stateViewEl = document.createElement('mm-ui-state-view');
+    stateViewEl.setModel(c.model);
+    containerEl.appendChild(stateViewEl);
+  }
 
   function onLoad() {
-    var cardStackEl = document.querySelector('mm-ui-card-stack');
-    var cardEl = [
-      document.createElement('mm-ui-card'),
-      document.createElement('mm-ui-card')
-    ];
-    cardEl[0].setFaceDown(mm.m.Card.COLOR_RED);
-    cardEl[1].setFaceUp(new mm.m.Card(
-        mm.m.Card.COLOR_YELLOW, mm.m.Card.ID_GAME, 4, mm.m.Card.SYMBOL_MUMMY));
-    cardStackEl.addCard(cardEl[1]);
-    cardStackEl.addCard(cardEl[0]);
+    var buttonEl = document.querySelector('button');
+    buttonEl.addEventListener('click', function() {
+      nextMove();
+    });
+    drawModel();
   }
   window.addEventListener('load', onLoad);
 

@@ -12,8 +12,6 @@ mm.exportTo('mm.c', function() {
   function Controller(playerControllers) {
     this.model_ = new Model(playerControllers.length);
     this.playerControllers_ = playerControllers;
-    this.currentTurn_ = 0;
-    this.currentPlayer_ = 0;
   }
 
   Controller.prototype = {
@@ -21,12 +19,17 @@ mm.exportTo('mm.c', function() {
       return this.playerControllers_.length;
     },
 
+    get currentPlayer() {
+      return this.model_.currentPlayer;
+    },
+
+    get model() {
+      return this.model_;
+    },
+
     format: function(prefix) {
-      var output = prefix + 'Current turn: ' + this.currentTurn_ + '\n';
-      output += prefix + 'Current player: ' + this.currentPlayer_ + '\n';
-      output += prefix + 'Model:\n' + this.model_.format(prefix + '  ');
       // TODO: Format player controllers.
-      return output;
+      return prefix + 'Model:\n' + this.model_.format(prefix + '  ');
     },
 
     scoreHand: function() {
@@ -39,22 +42,22 @@ mm.exportTo('mm.c', function() {
     },
 
     performDrawCard: function(stackIndex) {
-      this.model_.playerDrawCard(this.currentPlayer_, stackIndex);
-      this.advancePlayer_();
+      this.model_.playerDrawCard(this.currentPlayer, stackIndex);
+      this.model_.advancePlayer();
     },
 
     canScore: function() {
-      return !this.model_.isPlayerHandEmpty(this.currentPlayer_);
+      return !this.model_.isPlayerHandEmpty(this.currentPlayer);
     },
 
     performScore: function() {
-      this.model_.playerScoreHand(this.currentPlayer_);
-      this.advancePlayer_();
+      this.model_.playerScoreHand(this.currentPlayer);
+      this.model_.advancePlayer();
     },
 
     canDenounce: function(playerIndex) {
-      return playerIndex !== this.currentPlayer_ &&
-          !this.model_.isPlayerHandEmpty(this.currentPlayer_) &&
+      return playerIndex !== this.currentPlayer &&
+          !this.model_.isPlayerHandEmpty(this.currentPlayer) &&
           !this.model_.isPlayerHandEmpty(playerIndex);
     },
 
@@ -62,13 +65,13 @@ mm.exportTo('mm.c', function() {
       if (!this.model_.isPlayerHandCursed(playerIndex)) {
         // Denounce failed.
         this.model_.playerScoreHand(playerIndex);
-        this.advancePlayer_();
+        this.model_.advancePlayer();
       } else {
         // Denounce worked, check monsters.
         if (this.model_.playerHandHasSymbol(playerIndex,
             mm.m.Card.SYMBOL_MUMMY)) {
           // Current player scores opponent's hand.
-          this.model_.addToPlayerScore(this.currentPlayer_,
+          this.model_.addToPlayerScore(this.currentPlayer,
               this.model_.computePlayerHandScore(playerIndex));
         }
         if (this.model_.playerHandHasSymbol(playerIndex,
@@ -79,16 +82,10 @@ mm.exportTo('mm.c', function() {
         if (!this.model_.playerHandHasSymbol(playerIndex,
             mm.m.Card.SYMBOL_MONSTER)) {
           // Advance only if there are no monsters, otherwise take another move.
-          this.advancePlayer_();
+          this.model_.advancePlayer();
         }
         this.model_.playerClearHand(playerIndex);
       }
-    },
-
-    advancePlayer_: function() {
-      this.currentPlayer_ = (this.currentPlayer_ + 1) % this.numPlayers;
-      if (this.currentPlayer_ == 0)
-        this.currentTurn_++;
     }
   };
 

@@ -19,6 +19,10 @@ mm.exportTo('mm.m', function() {
       return this.hand_;
     },
 
+    get score() {
+      return this.score_;
+    },
+
     format: function(prefix) {
       var output = prefix + 'Score: ' + this.score_ + '\n';
       output += prefix + 'Hand:\n' + this.hand_.format(prefix + '  ');

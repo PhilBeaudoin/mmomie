@@ -16,6 +16,14 @@ mm.exportTo('mm.m', function() {
       return this.cards_.length;
     },
 
+    get topColor() {
+      return this.size == 0 ? undefined : this.cards_[this.size - 1].color;
+    },
+
+    get cards() {
+      return this.cards_.slice(0);
+    },
+
     push: function(card) {
       this.cards_.push(card);
     },
