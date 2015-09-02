@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<link rel="import" href="/base/base.html">
+
+<script>
+
+mm.exportTo('mm.s', function() {
+
+  function Histogram(min, max, numBins) {
+    this.min_ = min;
+    this.max_ = max;
+    this.numBins_ = numBins;
+    this.delta_ = (max - min) * 1.0 / numBins;
+    this.runningSum_ = 0;
+    this.numElements_ = 0;
+    this.bins_ = [];
+    for (var i = 0; i < numBins + 2; ++i)  // +2 for overflow/underflow bins.
+      this.bins_.push(0);
+  }
+
+  Histogram.prototype = {
+    get average() {
+      return this.runningSum_ / this.numElements_;
+    },
+
+    add: function(value) {
+      this.runningSum_ += value;
+      this.numElements_++;
+      var bin = Math.floor((value - this.min_)  / this.delta_);
+      bin = Math.max(-1, bin);
+      bin = Math.min(this.numBins_, bin);
+      this.bins_[bin + 1]++;  // +1 to account for underflow/overflow bins.
+    },
+
+    format: function(prefix) {
+      function interval(a, b, count) {
+        var out = (a === undefined) ? '-INF' : ('[' + a);
+        out += ', ';
+        out += (b === undefined) ? 'INF' : (b + '[');
+        return out + ' : ' + count + '\n';
+      }
+
+      var result = prefix + interval(undefined, this.min_, this.bins_[0]); 
+      for (i = 0; i < this.numBins_; ++i) {
+        result += prefix + interval(this.min_ + this.delta_ * i,
+            this.min_ + this.delta_ * (i + 1), this.bins_[i + 1]);
+      }
+      result += prefix + interval(this.max_, undefined,
+          this.bins_[this.numBins_ + 1]);
+      result += prefix + 'Average = ' + this.average;
+      return result;
+    }
+  };
+
+  return {
+    Histogram: Histogram
+  };
+});
+
+</script>
