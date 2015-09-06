@@ -69,6 +69,22 @@ mm.exportTo('mm.c', function() {
       this.model_.advancePlayer();
     },
 
+    canDrawTempCard: function(stackIndex) {
+      return this.model_.inTempCardMode && this.canDrawCard(stackIndex);
+    },
+
+    performDrawTempCard: function(stackIndex) {
+      this.model_.playerDrawTempCard(this.currentPlayer, stackIndex);
+    },
+
+    canDiscardTempCard: function(cardIndex) {
+      return this.model_.playerNumTempCards(this.currentPlayer) > cardIndex;
+    },
+
+    performDiscardTempCard: function(cardIndex) {
+      this.model_.playerDiscardTempCard(this.currentPlayer, cardIndex);
+    },
+
     canScore: function() {
       return !this.model_.isPlayerHandEmpty(this.currentPlayer);
     },
@@ -100,7 +116,16 @@ mm.exportTo('mm.c', function() {
         if (this.model_.playerHandHasSymbol(playerIndex,
             mm.m.Card.SYMBOL_WEREWOLF)) {
           // Current player draw two cards and can keep them.
-          // TODO: Ask the player controller to do this.
+          this.model_.tempCardMode = true;
+          var player = this.playerControllers_[this.model_.currentPlayer];
+          for (var i = 0; i < 2; ++i) {
+            this.reshuffleIfNeeded_();
+            if (!this.model_.areStacksEmpty())
+              player.performTempDraw(this);
+          }
+          player.performKeepOrDiscardTempCards(this);
+          this.model_.playerTempCardsToHand(this.model_.currentPlayer);
+          this.model_.tempCardMode = false;
         }
         if (!this.model_.playerHandHasSymbol(playerIndex,
             mm.m.Card.SYMBOL_MONSTER)) {

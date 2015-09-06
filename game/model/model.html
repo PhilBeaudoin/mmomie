@@ -31,6 +31,7 @@ mm.exportTo('mm.m', function() {
 
     this.currentTurn_ = 0;
     this.currentPlayer_ = 0;
+    this.tempCardMode_ = false;
   }
 
   Model.prototype = {
@@ -54,15 +55,19 @@ mm.exportTo('mm.m', function() {
       return this.currentPlayer_;
     },
 
+    set tempCardMode(tempCardMode) {
+      this.tempCardMode_ = tempCardMode;
+    },
+
     format: function(prefix) {
       var output = prefix + 'Current turn: ' + this.currentTurn_ + '\n';
       output += prefix + 'Current player: ' + this.currentPlayer_ + '\n';
+      output += prefix + 'Temporary carde mode: ' + this.tempCardMode_ + '\n';
       for (var i = 0; i < this.stacks_.length; ++i) {      
         output += prefix + 'Stack ' + i + ':\n';
         output += this.stacks_[i].format(prefix + '  ');
       }
-      output += prefix + 'Discard:\n';
-      output += this.discard_.format(prefix + '  ');
+      output += prefix + 'Discard:\n' + this.discard_.format(prefix + '  ');
       for (var i = 0; i < this.players_.length; ++i) {
         output += prefix + 'Player ' + i + ':\n';
         output += this.players_[i].format(prefix + '  ');
@@ -131,6 +136,23 @@ mm.exportTo('mm.m', function() {
     playerClearHand: function(playerIndex) {
       this.addStackToDiscard_(this.players_[playerIndex].hand);
       this.players_[playerIndex].clearHand();      
+    },
+
+    playerNumTempCards: function(playerIndex) {
+      return this.players_[playerIndex].tempCards.length;
+    },
+
+    playerDrawTempCard: function(playerIndex, stackIndex) {
+      this.players_[playerIndex].addCardToTemp(this.stacks_[stackIndex].pop());
+    },
+
+    playerDiscardTempCard: function(playerIndex, cardIndex) {
+      this.discard_.push(this.players[playerIndex].tempCards[cardIndex]);
+      this.players_[playerIndex].removeTempCard(removeTempCard);
+    },
+
+    playerTempCardsToHand: function(playerIndex) {
+      this.players_[playerIndex].tempCardsToHand();      
     },
 
     advancePlayer: function() {

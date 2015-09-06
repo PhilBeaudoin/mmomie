@@ -32,6 +32,10 @@ mm.exportTo('mm.m', function() {
       return this.cards_.pop();
     },
 
+    remove: function(index) {
+      return this.cards_.splice(index);
+    },
+
     clear: function() {
       this.cards_ = [];
     },

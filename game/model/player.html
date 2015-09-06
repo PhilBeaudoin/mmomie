@@ -11,12 +11,17 @@ mm.exportTo('mm.m', function() {
 
   function Player() {
     this.hand_ = new mm.m.CardStack();
+    this.tempCards_ = new mm.m.CardStack();
     this.score_ = 0;
   }
 
   Player.prototype = {
     get hand() {
       return this.hand_;
+    },
+
+    get tempCards() {
+      return this.tempCards_;
     },
 
     get score() {
@@ -26,11 +31,9 @@ mm.exportTo('mm.m', function() {
     format: function(prefix) {
       var output = prefix + 'Score: ' + this.score_ + '\n';
       output += prefix + 'Hand:\n' + this.hand_.format(prefix + '  ');
+      output += prefix + 'Temporary Cards:\n' +
+          this.tempCards_.format(prefix + '  ');
       return output;
-    },
-
-    addCard: function(card) {
-      this.hand_.push(card);
     },
 
     addToScore: function(score) {
@@ -56,6 +59,21 @@ mm.exportTo('mm.m', function() {
 
     addCardToHand: function(card) {
       this.hand_.push(card);
+    },
+
+    addCardToTemp: function(card) {
+      this.tempCards_.push(card);
+    },
+
+    removeTempCard: function(index) {
+      this.tempCards_.remove(index);
+    },
+
+    tempCardsToHand: function() {
+      this.tempCards_.cards.forEach(function(card){
+        this.addCardToHand(card);
+      }.bind(this));
+      this.tempCards_.clear();
     },
 
     isHandEmpty: function() {

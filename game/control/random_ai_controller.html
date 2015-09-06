@@ -27,6 +27,22 @@ mm.exportTo('mm.c', function() {
       }
       var i = Math.floor(Math.random() * possibleMoves.length);
       possibleMoves[i]();
+    },
+
+    performTempDraw(controller) {
+      var possibleMoves = [];
+      for (var i = 0; i < controller.model.stacks.length; ++i) {
+        if (controller.canDrawTempCard(i)) {
+          possibleMoves.push(
+              controller.performDrawTempCard.bind(controller, i));
+        }
+      }
+      var i = Math.floor(Math.random() * possibleMoves.length);
+      possibleMoves[i]();
+    },
+
+    performKeepOrDiscardTempCards(controller) {
+      // Never discard anything.
     }
   };
 
