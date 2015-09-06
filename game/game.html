@@ -33,21 +33,32 @@ found in the LICENSE file.
 </head>
 <body>
   <button>Next</button>
+  <div id="game-over" style="display: none;">GAME OVER!</div>
   <state-view></state-view>
   <script>
   'use strict';
+
+  var isGameOver = false;
+
+  function gameOver() {
+    isGameOver = true;
+    var gameOverEl = document.getElementById('game-over');
+    gameOverEl.style.display = 'block';
+  }
 
   var c = new mm.c.Controller([
     new mm.c.RandomAiController(),
     new mm.c.RandomAiController(),
     new mm.c.RandomAiController(),
     new mm.c.RandomAiController()
-  ]);
+  ], gameOver);
 
   function nextMove() {
-    c.performMove();
-    console.log(c.format(''));
-    drawModel();
+    if (!isGameOver) {
+      c.performMove();
+      console.log(c.format(''));
+      drawModel();
+    }
   }
 
   function drawModel() {

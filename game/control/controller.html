@@ -9,9 +9,10 @@ mm.exportTo('mm.c', function() {
 
   var Model = mm.m.Model;
 
-  function Controller(playerControllers) {
+  function Controller(playerControllers, gameEndCallback) {
     this.model_ = new Model(playerControllers.length);
     this.playerControllers_ = playerControllers;
+    this.gameEndCallback_ =gameEndCallback;
   }
 
   Controller.prototype = {
@@ -28,17 +29,35 @@ mm.exportTo('mm.c', function() {
     },
 
     performMove: function() {
+      this.reshuffleIfNeeded_();
       this.playerControllers_[this.model_.currentPlayer].performMove(this);
+      if (this.hasGameEnded()) {
+        for (var i = 0; i < this.numPlayers; ++i) {
+          if (!this.model_.isPlayerHandEmpty(this.currentPlayer))
+            this.model_.playerScoreHand(i);
+        }
+        this.gameEndCallback_();
+      }
+    },
+
+    reshuffleIfNeeded_: function() {
+      if(this.model_.areStacksEmpty())
+        this.model_.reshuffle();
+    },
+
+    hasGameEnded: function() {
+      if (this.model_.isDiscardEmpty() && this.model_.areStacksEmpty())
+        return true;
+      for (var i = 0; i < this.numPlayers; ++i) {
+        if (this.model_.getPlayerScore(i) >= 36)
+          return true;
+      }
+      return false;
     },
 
     format: function(prefix) {
       // TODO: Format player controllers.
       return prefix + 'Model:\n' + this.model_.format(prefix + '  ');
-    },
-
-    scoreHand: function() {
-      this.score_ += this.hand_.computeScore();
-      this.hand_.clear();
     },
 
     canDrawCard: function(stackIndex) {

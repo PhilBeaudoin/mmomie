@@ -12,6 +12,9 @@ found in the LICENSE file.
 <dom-module id="mm-ui-state-view">
   <template>
     <style>
+    .hidden {
+      display: none;
+    }
     </style>
     <div>
     Turn number: <span>{{model.currentTurn}}</span>
@@ -19,7 +22,8 @@ found in the LICENSE file.
     <div id="stacks">
       <div>Stacks:</div>
       <template is="dom-repeat" items="{{model.stacks}}">
-      <mm-ui-card card="{{item.topColor}}"></mm-ui-card>
+      <mm-ui-card class$="{{cardClass_(item)}}" card="{{item.topColor}}"
+          text="{{item.size}}"></mm-ui-card>
       </template>
     </div>
     <span id="players">
@@ -43,6 +47,12 @@ found in the LICENSE file.
 
       setModel: function(model) {
         this.set('model', model);
+      },
+
+      cardClass_: function(stack) {
+        if (stack.size === 0)
+          return 'hidden';
+        return '';
       }
     });
   </script>

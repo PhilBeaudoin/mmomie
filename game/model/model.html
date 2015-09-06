@@ -22,6 +22,8 @@ mm.exportTo('mm.m', function() {
     this.stacks_ = [new CardStack(), new CardStack()];
     tempStack.distribute(this.stacks_);
 
+    this.discard_ = new CardStack();
+
     this.players_ = []
     for (var i = 0; i < numPlayers; ++i) {
       this.players_.push(new Player());
@@ -59,6 +61,8 @@ mm.exportTo('mm.m', function() {
         output += prefix + 'Stack ' + i + ':\n';
         output += this.stacks_[i].format(prefix + '  ');
       }
+      output += prefix + 'Discard:\n';
+      output += this.discard_.format(prefix + '  ');
       for (var i = 0; i < this.players_.length; ++i) {
         output += prefix + 'Player ' + i + ':\n';
         output += this.players_[i].format(prefix + '  ');
@@ -68,7 +72,7 @@ mm.exportTo('mm.m', function() {
 
     isStackEmpty: function(stackIndex) {
       return this.stacks_.length <= stackIndex ||
-          this.stacks_[stackIndex].length === 0;
+          this.stacks_[stackIndex].size === 0;
     },
 
     iterateStacks: function(fun) {
@@ -90,8 +94,8 @@ mm.exportTo('mm.m', function() {
     topColors: function() {
       var result = [];
       for (var i = 0; i < this.stacks_.length; ++i) {
-        var length = stacks_[i].length;
-        if (length === 0)
+        var size = stacks_[i].size;
+        if (size === 0)
           result.push(undefined);
         else
           result.push(this.stacks_[i][length - 1].color);
@@ -107,6 +111,10 @@ mm.exportTo('mm.m', function() {
       this.players_[playerIndex].addCardToHand(this.stacks_[stackIndex].pop());
     },
 
+    getPlayerScore: function(playerIndex) {
+      return this.players_[playerIndex].score;
+    },
+
     computePlayerHandScore: function(playerIndex) {
       return this.players_[playerIndex].computeHandScore();
     },
@@ -116,10 +124,12 @@ mm.exportTo('mm.m', function() {
     },
 
     playerScoreHand: function(playerIndex) {
+      this.addStackToDiscard_(this.players_[playerIndex].hand);
       this.players_[playerIndex].scoreHand();
     },
 
     playerClearHand: function(playerIndex) {
+      this.addStackToDiscard_(this.players_[playerIndex].hand);
       this.players_[playerIndex].clearHand();      
     },
 
@@ -127,6 +137,35 @@ mm.exportTo('mm.m', function() {
       this.currentPlayer_ = (this.currentPlayer_ + 1) % this.numPlayers;
       if (this.currentPlayer_ == 0)
         this.currentTurn_++;
+    },
+
+    addStackToDiscard_: function(stack) {
+      stack.cards.forEach(function(card){
+        this.discard_.push(card);
+      }.bind(this));      
+    },
+
+    areStacksEmpty: function() {
+      var empty = true;
+      this.iterateStacks(function(stack) {
+        if (stack.size !== 0)
+          empty = false;
+      });
+      return empty;
+    },
+
+    isDiscardEmpty: function() {
+      return this.discard_.size === 0;
+    },
+
+    reshuffle: function() {
+      this.iterateStacks(function(stack) {
+        this.addStackToDiscard_(stack);
+        stack.clear();
+      }.bind(this));
+      this.discard_.shuffle();
+      this.discard_.distribute(this.stacks_);
+      this.discard_.clear();
     }
   };
 
