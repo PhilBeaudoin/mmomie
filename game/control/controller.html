@@ -70,7 +70,7 @@ mm.exportTo('mm.c', function() {
     },
 
     canDrawTempCard: function(stackIndex) {
-      return this.model_.inTempCardMode && this.canDrawCard(stackIndex);
+      return this.model_.tempCardMode && this.canDrawCard(stackIndex);
     },
 
     performDrawTempCard: function(stackIndex) {

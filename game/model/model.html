@@ -55,6 +55,10 @@ mm.exportTo('mm.m', function() {
       return this.currentPlayer_;
     },
 
+    get tempCardMode() {
+      return this.tempCardMode_;
+    },
+
     set tempCardMode(tempCardMode) {
       this.tempCardMode_ = tempCardMode;
     },
@@ -85,7 +89,7 @@ mm.exportTo('mm.m', function() {
     },
 
     isPlayerHandEmpty: function(playerIndex) {
-      this.players_[playerIndex].isHandEmpty();
+      return this.players_[playerIndex].isHandEmpty();
     },
 
     isPlayerHandCursed: function(playerIndex) {
