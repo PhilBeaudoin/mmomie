@@ -103,11 +103,7 @@ mm.exportTo('mm.m', function() {
     topColors: function() {
       var result = [];
       for (var i = 0; i < this.stacks_.length; ++i) {
-        var size = stacks_[i].size;
-        if (size === 0)
-          result.push(undefined);
-        else
-          result.push(this.stacks_[i][length - 1].color);
+        result.push(this.stacks_[i].topColor);
       }
       return result;
     },

@@ -28,6 +28,10 @@ mm.exportTo('mm.c', function() {
       return this.model_;
     },
 
+    getCurrentPlayerModel: function() {
+      return this.model.players[this.currentPlayer];
+    },
+
     performMove: function() {
       this.reshuffleIfNeeded_();
       this.playerControllers_[this.model_.currentPlayer].performMove(this);

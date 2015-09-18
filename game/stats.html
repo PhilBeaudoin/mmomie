@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!DOCTYPE HTML>
+<html>
+<!--
+Copyright (c) 2011 The Chromium Authors. All rights reserved.
+Use of this source code is governed by a BSD-style license that can be
+found in the LICENSE file.
+-->
+<head>
+<title>Maudite Momie!</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<script src="/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+<link rel="import" href="/control/controller.html">
+<link rel="import" href="/control/green_draw_ai_controller.html">
+<link rel="import" href="/control/random_ai_controller.html">
+<link rel="import" href="/control/red_draw_ai_controller.html">
+
+<style>
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    -webkit-flex-direction: column;
+    display: -webkit-flex;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+</head>
+<body>
+  <button>Pause</button>
+  <div id="wins"></div>
+  <script>
+  'use strict';
+
+  var wins = [0,0,0,0];
+  var ties = 0;
+  var pause = false;
+
+  var controller;
+
+  function createController() {
+    controller = new mm.c.Controller([
+      new mm.c.RandomAiController(),
+      new mm.c.RandomAiController(),
+      new mm.c.RedDrawAiController(),
+      new mm.c.GreenDrawAiController()
+    ], onGameOver);
+  }
+
+  function displayWins() {
+    var output = '';
+    for (var i = 0; i < 4; ++i)
+      output += 'Wins player ' + i + ' = ' + wins[i] + '<br />';
+    output += 'Ties = ' + ties + '<br />';
+    var winsEl = document.getElementById('wins');
+    winsEl.innerHTML = output;
+  }
+
+  function onGameOver() {
+    var bestScore = 0;
+    var winner = 0;
+    var tie = false;
+    var players = controller.model.players;
+    for (var i = 0; i < players.length; ++i) {
+      if (players[i].score > bestScore) {
+        bestScore = players[i].score;
+        winner = i;
+        tie = false;
+      } else if (players[i].score === bestScore) {
+        tie = true;
+      }
+    }
+    if (tie)
+      ties++;
+    else
+      wins[winner]++;
+    createController();
+  }  
+
+  function nextMove() {
+    if (!pause) {
+      for (var i = 0; i < 10000; ++i)
+        controller.performMove();
+    }
+    displayWins();
+    setTimeout(nextMove, 0);
+  }
+
+  function onLoad() {
+    var buttonEl = document.querySelector('button');
+    buttonEl.addEventListener('click', function() {
+      pause = !pause;
+    });
+    displayWins();
+    createController();
+    nextMove();    
+  }
+  window.addEventListener('load', onLoad);
+
+  </script>
+</body>
