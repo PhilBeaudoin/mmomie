@@ -10,9 +10,8 @@ mm.exportTo('mm.c', function() {
 
   var Model = mm.m.Model;
 
-  var subController = new mm.c.RandomAiController();
-
-  function GreenDrawAiController() {
+  function GreenDrawAiController(opt_subController) {
+    this.subController = opt_subController || new mm.c.RandomAiController();
   }
 
   GreenDrawAiController.prototype = {
@@ -22,7 +21,7 @@ mm.exportTo('mm.c', function() {
       if (bestCard !== -1)
         controller.performDrawCard(bestCard);
       else
-        subController.performMove(controller);
+        this.subController.performMove(controller);
     },
 
     performTempDraw(controller) {
@@ -31,7 +30,7 @@ mm.exportTo('mm.c', function() {
       if (bestCard !== -1)
         controller.performDrawTempCard(bestCard);
       else
-        subController.performTempDraw(controller);
+        this.subController.performTempDraw(controller);
     },
 
     performKeepOrDiscardTempCards(controller) {
@@ -46,16 +45,16 @@ mm.exportTo('mm.c', function() {
 
     findBestCard_(controller, testFunction) {
       var topColors = controller.model.topColors();
-      var bestColor = 1000;
+      var bestColor = mm.m.Card.COLOR_GREEN;
       var bestCard = -1;
       for (var i = 0; i < controller.model.stacks.length; ++i) {
-        if (testFunction(i) && topColors[i] < bestColor) {
+        if (testFunction(i) && topColors[i] <= bestColor) {
           bestColor = topColors[i];
           bestCard = i;
         }
       }
       return bestCard;
-    }
+    }  
   };    
 
   return {

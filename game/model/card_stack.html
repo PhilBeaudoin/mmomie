@@ -20,6 +20,10 @@ mm.exportTo('mm.m', function() {
       return this.size == 0 ? undefined : this.cards_[this.size - 1].color;
     },
 
+    get topCard() {
+      return this.size == 0 ? undefined : this.cards_[this.size - 1];
+    },
+
     get cards() {
       return this.cards_.slice(0);
     },
@@ -70,6 +74,10 @@ mm.exportTo('mm.m', function() {
     },
 
     isCursed: function() {
+      return this.numCursed() > 0;
+    },
+
+    numCursed: function() {
       var badSum = 0;
       this.cards_.forEach(function (card) {
         switch (card.symbol) {
@@ -83,7 +91,7 @@ mm.exportTo('mm.m', function() {
             badSum += 1;
         }
       });
-      return badSum > 0;
+      return badSum;
     },
 
     hasSymbol: function(symbol) {

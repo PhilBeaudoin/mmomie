@@ -69,6 +69,8 @@ mm.exportTo('mm.c', function() {
     },
 
     performDrawCard: function(stackIndex) {
+      this.writeMove_('Draw card: (' + stackIndex + ')',
+          this.model_.stacks[stackIndex].topCard.format('  '));
       this.model_.playerDrawCard(this.currentPlayer, stackIndex);
       this.model_.advancePlayer();
     },
@@ -78,6 +80,8 @@ mm.exportTo('mm.c', function() {
     },
 
     performDrawTempCard: function(stackIndex) {
+      this.writeMove_('Draw temp card (' + stackIndex + '):',
+          this.model_.stacks[stackIndex].topCard.format('  '));
       this.model_.playerDrawTempCard(this.currentPlayer, stackIndex);
     },
 
@@ -86,6 +90,9 @@ mm.exportTo('mm.c', function() {
     },
 
     performDiscardTempCard: function(cardIndex) {
+      this.writeMove_('Discard temp card (' + cardIndex + '):',
+          this.model_.players[this.currentPlayer].tempCards.cards[cardIndex]
+              .format('  '));
       this.model_.playerDiscardTempCard(this.currentPlayer, cardIndex);
     },
 
@@ -94,6 +101,8 @@ mm.exportTo('mm.c', function() {
     },
 
     performScore: function() {
+      this.writeMove_('Score:',
+          this.model_.players[this.currentPlayer].hand.format('  '));
       this.model_.playerScoreHand(this.currentPlayer);
       this.model_.advancePlayer();
     },
@@ -105,6 +114,8 @@ mm.exportTo('mm.c', function() {
     },
 
     performDenounce: function(playerIndex) {
+      this.writeMove_('Denounce (' + playerIndex + '):',
+          this.model_.players[playerIndex].hand.format('  '));
       if (!this.model_.isPlayerHandCursed(playerIndex)) {
         // Denounce failed.
         this.model_.playerScoreHand(playerIndex);
@@ -138,6 +149,11 @@ mm.exportTo('mm.c', function() {
         }
         this.model_.playerClearHand(playerIndex);
       }
+    },
+
+    writeMove_: function(move, details) {
+      console.log('Move #' + this.model_.currentTurn + '/' +
+          this.currentPlayer + ': ' + move + '\n' + details);
     }
   };
 

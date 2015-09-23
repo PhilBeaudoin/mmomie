@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<link rel="import" href="/control/random_ai_controller.html">
+<link rel="import" href="/model/model.html">
+<link rel="import" href="/model/card.html">
+
+<script>
+
+mm.exportTo('mm.c', function() {
+
+  var Model = mm.m.Model;
+
+  function ScoreAiController(probPerCurse, opt_subController) {
+    this.probPerCurse_ = probPerCurse.slice();
+    this.subController = opt_subController || new mm.c.RandomAiController();
+  }
+
+  ScoreAiController.prototype = {
+    performMove(controller) {
+      if (controller.canScore() && this.shouldScore_(controller))
+        controller.performScore();
+      else
+        this.subController.performMove(controller);
+    },
+
+    performTempDraw(controller) {
+      this.subController.performTempDraw(controller);
+    },
+
+    performKeepOrDiscardTempCards(controller) {
+      this.subController.performKeepOrDiscardTempCards(controller);
+    },
+
+    shouldScore_(controller) {
+      var numCursed = 
+          controller.model.players[controller.currentPlayer].hand.numCursed();
+
+      numCursed = Math.max(0, numCursed);
+      numCursed = Math.min(numCursed, this.probPerCurse_.length);
+
+      return Math.random() < this.probPerCurse_[numCursed];
+    }  
+  };    
+
+  return {
+    ScoreAiController: ScoreAiController
+  };
+});
+
+</script>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<link rel="import" href="/control/random_ai_controller.html">
+<link rel="import" href="/model/model.html">
+<link rel="import" href="/model/card.html">
+
+<script>
+
+mm.exportTo('mm.c', function() {
+
+  var Model = mm.m.Model;
+
+  function DenounceAiController(opt_subController) {
+    this.subController = opt_subController || new mm.c.RandomAiController();
+  }
+
+  DenounceAiController.prototype = {
+    performMove(controller) {
+      var bestDenounce = this.findBestDenounce_(controller, 
+          controller.canDenounce.bind(controller));
+      if (bestDenounce !== -1)
+        controller.performDenounce(bestDenounce);
+      else
+        this.subController.performMove(controller);
+    },
+
+    performTempDraw(controller) {
+      this.subController.performTempDraw(controller);
+    },
+
+    performKeepOrDiscardTempCards(controller) {
+      this.subController.performKeepOrDiscardTempCards(controller);
+    },
+
+    findBestDenounce_(controller, testFunction) {
+      var colorToProb = {};
+      colorToProb[mm.m.Card.COLOR_GREEN] = 1/12;
+      colorToProb[mm.m.Card.COLOR_YELLOW] = 2/9;
+      colorToProb[mm.m.Card.COLOR_RED] = 5/12;
+
+      var players = controller.model.players;
+      var bestProb = 0;
+      var bestDenounce = -1;
+      for (var i = 0; i < controller.model.numPlayers; ++i) {
+        if (testFunction(i)) {
+          var prob = 0;
+          players[i].hand.cards.forEach(function(card){
+            prob += colorToProb[card.color];
+          });
+          if (prob > bestProb) {
+            bestProb = prob;
+            bestDenounce = i;
+          }
+        }
+      }
+
+      if (Math.random() >= prob)
+        return -1;
+      return bestDenounce;
+    }  
+  };    
+
+  return {
+    DenounceAiController: DenounceAiController
+  };
+});
+
+</script>
