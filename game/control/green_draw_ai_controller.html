@@ -34,11 +34,12 @@ mm.exportTo('mm.c', function() {
     },
 
     performKeepOrDiscardTempCards(controller) {
-      // Discard non-green.
+      // Discard monster cards.
       var tempCards = controller.getCurrentPlayerModel().tempCards;
       for (var i = 0; i < tempCards.length; ++i) {
         if (controller.canDiscardTempCard(i) &&
-            tempCards[i].color != mm.m.Card.COLOR_GREEN)
+            tempCards[i].symbol != mm.m.Card.SYMBOL_NONE &&
+            tempCards[i].symbol != mm.m.Card.SYMBOL_AMULET)
           controller.performDiscardTempCard(i);
       }
     },

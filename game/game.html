@@ -52,24 +52,23 @@ found in the LICENSE file.
 
   var c = new mm.c.Controller([
       new mm.c.ScoreAiController([0.1,0.8,1.0],
-          new mm.c.DenounceAiController([0.1, 0.88, 1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
               new mm.c.IntelligentDrawAiController(1))),
       new mm.c.ScoreAiController([0.1,0.8,1.0],
-          new mm.c.DenounceAiController([0.1, 0.88, 1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
               new mm.c.IntelligentDrawAiController(1))),
       new mm.c.ScoreAiController([0.1,0.8,1.0],
-          new mm.c.DenounceAiController([0.1, 0.88, 1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
               new mm.c.IntelligentDrawAiController(1))),
       new mm.c.ScoreAiController([0.1,0.8,1.0],
-          new mm.c.DenounceAiController([0.1, 0.88, 1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
               new mm.c.IntelligentDrawAiController(1)))
   ], gameOver, false);
 
   function nextMove() {
     if (!isGameOver) {
-//      console.log(c.format(''));
       c.performMove();
-      console.log(c.lastMove);
+      console.log(c.format(''));
       drawModel();
     }
   }

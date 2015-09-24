@@ -34,19 +34,19 @@ mm.exportTo('mm.c', function() {
     },
 
     performKeepOrDiscardTempCards(controller) {
-      // Discard non-red.
+      // Discard monster cards.
       var tempCards = controller.getCurrentPlayerModel().tempCards;
       for (var i = 0; i < tempCards.length; ++i) {
         if (controller.canDiscardTempCard(i) &&
-            tempCards[i].color != mm.m.Card.COLOR_RED)
+            tempCards[i].symbol != mm.m.Card.SYMBOL_NONE &&
+            tempCards[i].symbol != mm.m.Card.SYMBOL_AMULET)
           controller.performDiscardTempCard(i);
       }
     },
 
     findBestCard_(controller, testFunction) {
       var topColors = controller.model.topColors();
-//      var bestColor = mm.m.Card.COLOR_YELLOW;
-      var bestColor = mm.m.Card.COLOR_RED;
+      var bestColor = mm.m.Card.COLOR_YELLOW;
       var bestCard = -1;
       for (var i = 0; i < controller.model.stacks.length; ++i) {
         if (testFunction(i) && topColors[i] >= bestColor) {

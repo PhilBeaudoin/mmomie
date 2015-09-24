@@ -67,7 +67,8 @@ mm.exportTo('mm.c', function() {
 
     format: function(prefix) {
       // TODO: Format player controllers.
-      return prefix + 'Model:\n' + this.model_.format(prefix + '  ');
+      return prefix + 'Model:\n' + this.model_.format(prefix + '  ') + '\n'
+          + prefix + 'Last move:\n' + this.lastMove_;
     },
 
     canDrawCard: function(stackIndex) {
