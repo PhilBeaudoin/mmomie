@@ -66,12 +66,13 @@ mm.exportTo('mm.m', function() {
     },
 
     removeTempCard: function(index) {
-      this.tempCards_.remove(index);
+      this.tempCards_[index] = undefined;
     },
 
     tempCardsToHand: function() {
       this.tempCards_.cards.forEach(function(card){
-        this.addCardToHand(card);
+        if (card !== undefined)
+          this.addCardToHand(card);
       }.bind(this));
       this.tempCards_.clear();
     },

@@ -36,10 +36,10 @@ mm.exportTo('mm.c', function() {
     performKeepOrDiscardTempCards(controller) {
       // Discard monster cards.
       var tempCards = controller.getCurrentPlayerModel().tempCards;
-      for (var i = 0; i < tempCards.length; ++i) {
+      for (var i = 0; i < tempCards.size; ++i) {
         if (controller.canDiscardTempCard(i) &&
-            tempCards[i].symbol != mm.m.Card.SYMBOL_NONE &&
-            tempCards[i].symbol != mm.m.Card.SYMBOL_AMULET)
+            tempCards.cards[i].symbol != mm.m.Card.SYMBOL_NONE &&
+            tempCards.cards[i].symbol != mm.m.Card.SYMBOL_AMULET)
           controller.performDiscardTempCard(i);
       }
     },

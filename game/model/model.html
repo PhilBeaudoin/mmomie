@@ -139,7 +139,7 @@ mm.exportTo('mm.m', function() {
     },
 
     playerNumTempCards: function(playerIndex) {
-      return this.players_[playerIndex].tempCards.length;
+      return this.players_[playerIndex].tempCards.size;
     },
 
     playerDrawTempCard: function(playerIndex, stackIndex) {
@@ -147,8 +147,8 @@ mm.exportTo('mm.m', function() {
     },
 
     playerDiscardTempCard: function(playerIndex, cardIndex) {
-      this.discard_.push(this.players[playerIndex].tempCards[cardIndex]);
-      this.players_[playerIndex].removeTempCard(removeTempCard);
+      this.discard_.push(this.players[playerIndex].tempCards.cards[cardIndex]);
+      this.players_[playerIndex].removeTempCard(cardIndex);
     },
 
     playerTempCardsToHand: function(playerIndex) {
