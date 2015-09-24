@@ -15,6 +15,7 @@ found in the LICENSE file.
 <link rel="import" href="/control/controller.html">
 <link rel="import" href="/control/denounce_ai_controller.html">
 <link rel="import" href="/control/green_draw_ai_controller.html">
+<link rel="import" href="/control/intelligent_draw_ai_controller.html">
 <link rel="import" href="/control/random_ai_controller.html">
 <link rel="import" href="/control/score_ai_controller.html">
 <link rel="import" href="/control/red_draw_ai_controller.html">
@@ -50,22 +51,25 @@ found in the LICENSE file.
   }
 
   var c = new mm.c.Controller([
-    new mm.c.DenounceAiController(new mm.c.GreenDrawAiController()),
-    new mm.c.RandomAiController(),
-    new mm.c.ScoreAiController([0.1,0.8,1.0],
-        new mm.c.DenounceAiController(
-            new mm.c.RedDrawAiController(
-                new mm.c.GreenDrawAiController()))),
-    new mm.c.ScoreAiController([0.1,0.8,1.0],
-        new mm.c.DenounceAiController(
-            new mm.c.GreenDrawAiController(
-                new mm.c.RedDrawAiController())))
-  ], gameOver);
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.88, 1.0],
+              new mm.c.IntelligentDrawAiController(1))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.88, 1.0],
+              new mm.c.IntelligentDrawAiController(1))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.88, 1.0],
+              new mm.c.IntelligentDrawAiController(1))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.88, 1.0],
+              new mm.c.IntelligentDrawAiController(1)))
+  ], gameOver, false);
 
   function nextMove() {
     if (!isGameOver) {
 //      console.log(c.format(''));
       c.performMove();
+      console.log(c.lastMove);
       drawModel();
     }
   }
@@ -75,6 +79,7 @@ found in the LICENSE file.
     while (containerEl.firstChild)
       containerEl.removeChild(containerEl.firstChild);
     var stateViewEl = document.createElement('mm-ui-state-view');
+    stateViewEl.setController(c);
     stateViewEl.setModel(c.model);
     containerEl.appendChild(stateViewEl);
   }

@@ -10,7 +10,8 @@ mm.exportTo('mm.c', function() {
 
   var Model = mm.m.Model;
 
-  function DenounceAiController(opt_subController) {
+  function DenounceAiController(probPerColor, opt_subController) {
+    this.probPerColor_ = probPerColor;
     this.subController = opt_subController || new mm.c.RandomAiController();
   }
 
@@ -33,11 +34,6 @@ mm.exportTo('mm.c', function() {
     },
 
     findBestDenounce_(controller, testFunction) {
-      var colorToProb = {};
-      colorToProb[mm.m.Card.COLOR_GREEN] = 1/12;
-      colorToProb[mm.m.Card.COLOR_YELLOW] = 2/9;
-      colorToProb[mm.m.Card.COLOR_RED] = 5/12;
-
       var players = controller.model.players;
       var bestProb = 0;
       var bestDenounce = -1;
@@ -45,8 +41,8 @@ mm.exportTo('mm.c', function() {
         if (testFunction(i)) {
           var prob = 0;
           players[i].hand.cards.forEach(function(card){
-            prob += colorToProb[card.color];
-          });
+            prob += this.probPerColor_[card.color];
+          }.bind(this));
           if (prob > bestProb) {
             bestProb = prob;
             bestDenounce = i;

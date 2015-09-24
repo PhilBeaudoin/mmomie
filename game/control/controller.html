@@ -9,10 +9,12 @@ mm.exportTo('mm.c', function() {
 
   var Model = mm.m.Model;
 
-  function Controller(playerControllers, gameEndCallback) {
+  function Controller(playerControllers, gameEndCallback, silent) {
     this.model_ = new Model(playerControllers.length);
     this.playerControllers_ = playerControllers;
-    this.gameEndCallback_ =gameEndCallback;
+    this.gameEndCallback_ = gameEndCallback;
+    this.silent_ = silent;
+    this.lastMove_ = '';
   }
 
   Controller.prototype = {
@@ -26,6 +28,10 @@ mm.exportTo('mm.c', function() {
 
     get model() {
       return this.model_;
+    },
+
+    get lastMove() {
+      return this.lastMove_;
     },
 
     getCurrentPlayerModel: function() {
@@ -69,7 +75,7 @@ mm.exportTo('mm.c', function() {
     },
 
     performDrawCard: function(stackIndex) {
-      this.writeMove_('Draw card: (' + stackIndex + ')',
+      this.saveLastMove_('Draw card (' + stackIndex + '):',
           this.model_.stacks[stackIndex].topCard.format('  '));
       this.model_.playerDrawCard(this.currentPlayer, stackIndex);
       this.model_.advancePlayer();
@@ -80,7 +86,7 @@ mm.exportTo('mm.c', function() {
     },
 
     performDrawTempCard: function(stackIndex) {
-      this.writeMove_('Draw temp card (' + stackIndex + '):',
+      this.saveLastMove_('Draw temp card (' + stackIndex + '):',
           this.model_.stacks[stackIndex].topCard.format('  '));
       this.model_.playerDrawTempCard(this.currentPlayer, stackIndex);
     },
@@ -90,7 +96,7 @@ mm.exportTo('mm.c', function() {
     },
 
     performDiscardTempCard: function(cardIndex) {
-      this.writeMove_('Discard temp card (' + cardIndex + '):',
+      this.saveLastMove_('Discard temp card (' + cardIndex + '):',
           this.model_.players[this.currentPlayer].tempCards.cards[cardIndex]
               .format('  '));
       this.model_.playerDiscardTempCard(this.currentPlayer, cardIndex);
@@ -101,7 +107,7 @@ mm.exportTo('mm.c', function() {
     },
 
     performScore: function() {
-      this.writeMove_('Score:',
+      this.saveLastMove_('Score:',
           this.model_.players[this.currentPlayer].hand.format('  '));
       this.model_.playerScoreHand(this.currentPlayer);
       this.model_.advancePlayer();
@@ -114,7 +120,7 @@ mm.exportTo('mm.c', function() {
     },
 
     performDenounce: function(playerIndex) {
-      this.writeMove_('Denounce (' + playerIndex + '):',
+      this.saveLastMove_('Denounce (' + playerIndex + '):',
           this.model_.players[playerIndex].hand.format('  '));
       if (!this.model_.isPlayerHandCursed(playerIndex)) {
         // Denounce failed.
@@ -151,9 +157,11 @@ mm.exportTo('mm.c', function() {
       }
     },
 
-    writeMove_: function(move, details) {
-      console.log('Move #' + this.model_.currentTurn + '/' +
-          this.currentPlayer + ': ' + move + '\n' + details);
+    saveLastMove_: function(move, details) {
+      if (!this.silent_) {
+        this.lastMove_ = 'Move #' + this.model_.currentTurn + ' Player ' +
+            this.currentPlayer + ' = ' + move + '\n' + details;
+      }
     }
   };
 

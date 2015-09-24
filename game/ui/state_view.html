@@ -19,6 +19,9 @@ found in the LICENSE file.
     <div>
     Turn number: <span>{{model.currentTurn}}</span>
     </div>
+    <div>
+    Last move:<pre>{{lastMove_(controller)}}</pre>
+    </div>
     <div id="stacks">
       <div>Stacks:</div>
       <template is="dom-repeat" items="{{model.stacks}}">
@@ -42,17 +45,26 @@ found in the LICENSE file.
       is: 'mm-ui-state-view',
 
       properties: {
-        model: Object
+        model: Object,
+        controller: Object
       },
 
       setModel: function(model) {
         this.set('model', model);
       },
 
+      setController: function(controller) {
+        this.set('controller', controller);
+      },
+
       cardClass_: function(stack) {
         if (stack.size === 0)
           return 'hidden';
         return '';
+      },
+
+      lastMove_: function(controller) {
+        return controller.lastMove; //replace(/\n/g, '<br />');
       }
     });
   </script>

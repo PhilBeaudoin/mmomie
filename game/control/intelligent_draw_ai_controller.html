@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<link rel="import" href="/control/random_ai_controller.html">
+<link rel="import" href="/model/model.html">
+<link rel="import" href="/model/card.html">
+
+<script>
+
+mm.exportTo('mm.c', function() {
+
+  var Model = mm.m.Model;
+
+  function IntelligentDrawAiController(numCurses, opt_subController) {
+    this.numCurses_ = numCurses;
+    this.subController = opt_subController || new mm.c.RandomAiController();
+  }
+
+  IntelligentDrawAiController.prototype = {
+    performMove(controller) {
+      var bestCard = this.findBestCard_(controller, 
+          controller.canDrawCard.bind(controller));
+      if (bestCard !== -1)
+        controller.performDrawCard(bestCard);
+      else
+        this.subController.performMove(controller);
+    },
+
+    performTempDraw(controller) {
+      var bestCard = this.findBestCard_(controller, 
+          controller.canDrawTempCard.bind(controller));
+      if (bestCard !== -1)
+        controller.performDrawTempCard(bestCard);
+      else
+        this.subController.performTempDraw(controller);
+    },
+
+    performKeepOrDiscardTempCards(controller) {
+      // Discard monster cards.
+      var tempCards = controller.getCurrentPlayerModel().tempCards;
+      for (var i = 0; i < tempCards.length; ++i) {
+        if (controller.canDiscardTempCard(i) &&
+            tempCards[i].symbol != mm.m.Card.SYMBOL_NONE &&
+            tempCards[i].symbol != mm.m.Card.SYMBOL_AMULET)
+          controller.performDiscardTempCard(i);
+      }
+    },
+
+    findBestCard_(controller, testFunction) {
+      var numCursed = 
+          controller.model.players[controller.currentPlayer].hand.numCursed();
+      var topColors = controller.model.topColors();
+      var bestColor = numCursed >= this.numCurses_ ? mm.m.Card.COLOR_RED :
+          mm.m.Card.COLOR_GREEN;
+      var bestCard = -1;
+      for (var i = 0; i < controller.model.stacks.length; ++i) {
+        if (testFunction(i) && 
+            (numCursed >= this.numCurses_ && topColors[i] <= bestColor ||
+             numCursed < this.numCurses_ && topColors[i] >= bestColor)) {
+          bestColor = topColors[i];
+          bestCard = i;
+        }
+      }
+      return bestCard;
+    }  
+  };    
+
+  return {
+    IntelligentDrawAiController: IntelligentDrawAiController
+  };
+});
+
+</script>
