@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 
+<link rel="import" href="/model/config.html">
 <link rel="import" href="/model/model.html">
 <link rel="import" href="/model/card.html">
 
@@ -59,7 +60,7 @@ mm.exportTo('mm.c', function() {
       if (this.model_.isDiscardEmpty() && this.model_.areStacksEmpty())
         return true;
       for (var i = 0; i < this.numPlayers; ++i) {
-        if (this.model_.getPlayerScore(i) >= 36)
+        if (this.model_.getPlayerScore(i) >= mm.m.MaxScore())
           return true;
       }
       return false;

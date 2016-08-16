@@ -19,6 +19,7 @@ found in the LICENSE file.
 <link rel="import" href="/control/random_ai_controller.html">
 <link rel="import" href="/control/score_ai_controller.html">
 <link rel="import" href="/control/red_draw_ai_controller.html">
+<link rel="import" href="/stats/histogram.html">
 
 <style>
   html,
@@ -41,6 +42,7 @@ found in the LICENSE file.
   'use strict';
 
   var wins = [0,0,0,0];
+  var numMoves = new mm.s.Histogram(0,40,10);
   var ties = 0;
   var pause = false;
   var silent = true;
@@ -79,6 +81,8 @@ found in the LICENSE file.
       ties++;
     else
       wins[winner]++;
+    numMoves.add(controller.model.currentTurn);
+
     createController();
   }  
 
@@ -95,6 +99,7 @@ found in the LICENSE file.
     var buttonEl = document.querySelector('button');
     buttonEl.addEventListener('click', function() {
       pause = !pause;
+      console.log(numMoves.format(''));
     });
     displayWins();
     createController();
@@ -695,6 +700,210 @@ found in the LICENSE file.
     ];
   }
 
+  function experiment6_0b() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.25*1/12, 0.25*2/9, 0.25*5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0)))
+    ];
+  }
+
+  function experiment6_1b() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.5*1/12, 0.5*2/9, 0.5*5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0)))
+    ];
+  }
+
+  function experiment6_2b() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.8*1/12, 0.8*2/9, 0.8*5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0)))
+    ];
+  }
+
+  function experiment6_3b() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0)))
+    ];
+  }
+
+  function experiment6_4b() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1.25*1/12, 1.25*2/9, 1.25*5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0)))
+    ];
+  }
+
+  function experiment6_5b() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([2.0*1/12, 2.0*2/9, 2.0*5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0)))
+    ];
+  }
+
+  function experiment6_6b() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([4.0*1/12, 4.0*2/9, 4.0*5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0)))
+    ];
+  }
+
+  function experiment6_7b() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([6.5*1/12, 6.5*2/9, 6.5*5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0)))
+    ];
+  }
+
+  function experiment6_8b() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([8.0*1/12, 8.0*2/9, 8.0*5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0)))
+    ];
+  }
+
+  function experiment6_9b() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.1, 0.8],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0)))
+    ];
+  }
+
+  function experiment6_10b() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.5, 0.8],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0)))
+    ];
+  }
+
+  function experiment6_11b() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.8, 0.8],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([1/12, 2/9, 5/12],
+              new mm.c.IntelligentDrawAiController(0)))
+    ];
+  }
+
   function experiment7_0() {
     return [
       new mm.c.ScoreAiController([0.1,0.8,1.0],
@@ -763,8 +972,92 @@ found in the LICENSE file.
     ];
   }
 
+  function experiment9_0() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.GreenDrawAiController(
+                  new mm.c.RedDrawAiController()))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.GreenDrawAiController(
+                  new mm.c.RedDrawAiController()))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.GreenDrawAiController(
+                  new mm.c.RedDrawAiController()))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.GreenDrawAiController(
+                  new mm.c.RedDrawAiController())))
+    ];
+  }
+
+  function experiment9_1() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.RedDrawAiController(
+                  new mm.c.GreenDrawAiController()))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.GreenDrawAiController(
+                  new mm.c.RedDrawAiController()))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.GreenDrawAiController(
+                  new mm.c.RedDrawAiController()))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.GreenDrawAiController(
+                  new mm.c.RedDrawAiController())))
+    ];
+  }
+
+  function experiment9_2() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.GreenDrawAiController(
+                  new mm.c.RedDrawAiController()))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.RedDrawAiController(
+                  new mm.c.GreenDrawAiController()))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.RedDrawAiController(
+                  new mm.c.GreenDrawAiController()))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.RedDrawAiController(
+                  new mm.c.GreenDrawAiController())))
+    ];
+  }
+
+  function experiment9_3() {
+    return [
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.RedDrawAiController(
+                  new mm.c.GreenDrawAiController()))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.RedDrawAiController(
+                  new mm.c.GreenDrawAiController()))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.RedDrawAiController(
+                  new mm.c.GreenDrawAiController()))),
+      new mm.c.ScoreAiController([0.1,0.8,1.0],
+          new mm.c.DenounceAiController([0.1, 0.4, 0.8],
+              new mm.c.RedDrawAiController(
+                  new mm.c.GreenDrawAiController())))
+    ];
+  }
+
   function createController() {
-    controller = new mm.c.Controller(experiment8_0(), onGameOver, true);
+    controller = new mm.c.Controller(experiment6_11b(), onGameOver, true);
   }
 
   </script>

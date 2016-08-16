@@ -77,8 +77,97 @@ mm.exportTo('mm.m', function() {
       Id(Card.ID_BIRD, [Info(3), Info(4, Card.SYMBOL_MONSTER)])])(stack);
   }
 
+  function MaxScore() {
+    return 36;
+  }
+
+  function AddInitialCards2(stack) {
+    Color(Card.COLOR_GREEN, [
+      Id(Card.ID_COLLAR, [
+        Info(1, Card.SYMBOL_AMULET), Info(1), Info(1),
+        Info(2, Card.SYMBOL_MONSTER)]),
+      Id(Card.ID_MIRROR, [
+        Info(1, Card.SYMBOL_AMULET), Info(1), Info(1),
+        Info(2, Card.SYMBOL_MONSTER)]),
+      Id(Card.ID_HEAD, [
+        Info(1, Card.SYMBOL_AMULET), Info(1), Info(1),
+        Info(2, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_GAME, [
+        Info(1, Card.SYMBOL_AMULET), Info(1), Info(1),
+        Info(2, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_STATUE, [
+        Info(1), Info(1), Info(1), Info(2, Card.SYMBOL_MUMMY)]),
+      Id(Card.ID_BIRD, [
+        Info(1), Info(1), Info(1), Info(2, Card.SYMBOL_MUMMY)])])(stack);
+    Color(Card.COLOR_YELLOW, [
+      Id(Card.ID_COLLAR, [Info(1), Info(2), Info(3, Card.SYMBOL_MUMMY)]),
+      Id(Card.ID_MIRROR, [Info(1), Info(2), Info(3, Card.SYMBOL_MUMMY)]),
+      Id(Card.ID_HEAD, [Info(1), Info(2), Info(3, Card.SYMBOL_MONSTER)]),
+      Id(Card.ID_GAME, [Info(1), Info(2), Info(3, Card.SYMBOL_MONSTER)]),
+      Id(Card.ID_STATUE, [
+        Info(1, Card.SYMBOL_AMULET), Info(2), Info(3, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_BIRD, [
+        Info(1, Card.SYMBOL_AMULET), Info(2),
+        Info(3, Card.SYMBOL_WEREWOLF)])])(stack);
+    Color(Card.COLOR_RED, [
+      Id(Card.ID_COLLAR, [
+        Info(2, Card.SYMBOL_AMULET),
+        Info(3, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_MIRROR, [
+        Info(2), Info(3, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_HEAD, [Info(2), Info(3, Card.SYMBOL_MUMMY)]),
+      Id(Card.ID_GAME, [Info(3), Info(3, Card.SYMBOL_MUMMY)]),
+      Id(Card.ID_STATUE, [Info(3), Info(3, Card.SYMBOL_MONSTER)]),
+      Id(Card.ID_BIRD, [Info(3), Info(3, Card.SYMBOL_MONSTER)])])(stack);
+  }
+
+  function MaxScore2() {
+    return 36;
+  }
+
+  function AddInitialCards3(stack) {
+    Color(Card.COLOR_GREEN, [
+      Id(Card.ID_COLLAR, [
+        Info(1, Card.SYMBOL_AMULET), Info(2), Info(2),
+        Info(3, Card.SYMBOL_MONSTER), Info(3, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_MIRROR, [
+        Info(1, Card.SYMBOL_AMULET), Info(2), Info(2),
+        Info(3, Card.SYMBOL_WEREWOLF), Info(3, Card.SYMBOL_MONSTER)]),
+      Id(Card.ID_HEAD, [
+        Info(1, Card.SYMBOL_AMULET), Info(2), Info(2),
+        Info(3, Card.SYMBOL_MUMMY), Info(2)]),
+      Id(Card.ID_GAME, [
+        Info(1, Card.SYMBOL_AMULET), Info(1, Card.SYMBOL_AMULET), Info(2),
+        Info(3, Card.SYMBOL_MUMMY), Info(2)])])(stack);
+    Color(Card.COLOR_YELLOW, [
+      Id(Card.ID_COLLAR, [Info(2, Card.SYMBOL_AMULET), Info(3), Info(3),
+        Info(4, Card.SYMBOL_MUMMY), Info(4, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_MIRROR, [Info(2, Card.SYMBOL_AMULET), Info(3), Info(3),
+        Info(4, Card.SYMBOL_MUMMY), Info(4, Card.SYMBOL_MONSTER)]),
+      Id(Card.ID_HEAD, [Info(3), Info(3), Info(3), Info(4, Card.SYMBOL_MONSTER),
+        Info(4, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_GAME, [Info(2, Card.SYMBOL_AMULET), Info(3),
+        Info(4, Card.SYMBOL_MUMMY), Info(4, Card.SYMBOL_MONSTER),
+        Info(4, Card.SYMBOL_MONSTER)])])(stack);
+    Color(Card.COLOR_RED, [
+      Id(Card.ID_COLLAR, [Info(4), Info(4), Info(5, Card.SYMBOL_MONSTER),
+        Info(5, Card.SYMBOL_MUMMY), Info(5, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_MIRROR, [Info(4), Info(4), Info(5, Card.SYMBOL_MONSTER),
+        Info(5, Card.SYMBOL_MUMMY), Info(5, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_HEAD, [Info(3, Card.SYMBOL_AMULET), Info(4),
+        Info(5, Card.SYMBOL_MONSTER),
+        Info(5, Card.SYMBOL_MUMMY), Info(5, Card.SYMBOL_WEREWOLF)]),
+      Id(Card.ID_GAME, [Info(4), Info(4), Info(5, Card.SYMBOL_MONSTER),
+        Info(5, Card.SYMBOL_MUMMY), Info(5, Card.SYMBOL_WEREWOLF)])])(stack);
+  }
+
+  function MaxScore3() {
+    return 70;
+  }
+
   return {
-    AddInitialCards: AddInitialCards
+    AddInitialCards: AddInitialCards3,
+    MaxScore: MaxScore3
   };
 });
 
